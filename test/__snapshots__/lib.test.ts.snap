@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`lib publishSchemas 1`] = `
+Object {
+  "BasicProfile": "ceramic://bafyreibaqfnywxojlctrocccv5kmofgilpqhex4spfbp6sd3ortmrl3e2q",
+  "DocIdDocIdMap": "ceramic://bafyreiecbrz74m4ptvpadfhtriuh5f2g5xe3pzhp5iugs4reiiw6bq5yxi",
+  "DocIdMap": "ceramic://bafyreid7hbhnxcqyjs52grytmbsliaglvmkvdc3od3jfho34fp4f7akjsm",
+  "StringMap": "ceramic://bafyreiagoofia7nmr4k6syboj6ckqft6utu2ne5k4d36vzh4udndglxety",
+}
+`;
