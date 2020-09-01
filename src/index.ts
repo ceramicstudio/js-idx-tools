@@ -1,15 +1,20 @@
 import { CeramicApi } from '@ceramicnetwork/ceramic-common'
 
+import * as schemas from './schemas'
 import { isSchemaSecure } from './validate'
 
-export * as allSchemas from './schemas'
-export { isSchemaSecure } from './validate'
+export { schemas, isSchemaSecure }
 
 export interface SchemaItem {
   docId?: string
   name: string
-  schema: Record<string, any>
+  schema: Record<string, unknown>
 }
+
+export const schemasList: Array<SchemaItem> = Object.entries(schemas).map(([name, schema]) => ({
+  name,
+  schema,
+}))
 
 export async function publishSchema(ceramic: CeramicApi, item: SchemaItem): Promise<string> {
   if (!isSchemaSecure(item.schema)) {
@@ -33,12 +38,12 @@ export interface PublishConfig {
 
 export async function publishSchemas({
   ceramic,
-  schemas,
+  schemas: list,
 }: PublishConfig): Promise<Record<string, string>> {
   const docIds = await Promise.all(
-    schemas.map(async (item: SchemaItem) => await publishSchema(ceramic, item))
+    list.map(async (item: SchemaItem) => await publishSchema(ceramic, item))
   )
-  return schemas.reduce((acc, { name }, i) => {
+  return list.reduce((acc, { name }, i) => {
     acc[name] = docIds[i]
     return acc
   }, {} as Record<string, string>)

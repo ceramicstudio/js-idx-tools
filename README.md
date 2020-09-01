@@ -18,7 +18,7 @@ Ceramic API interface exported by the [`@ceramicnetwork/ceramic-common` library]
 interface SchemaItem {
   docId?: string
   name: string
-  schema: Record<string, any>
+  schema: Record<string, unknown>
 }
 ```
 
@@ -31,9 +31,9 @@ interface PublishConfig {
 }
 ```
 
-## API
+## Constants
 
-### allSchemas
+### schemas
 
 A record of all the JSON schemas defined and used by IDX, with the following keys:
 
@@ -42,11 +42,17 @@ A record of all the JSON schemas defined and used by IDX, with the following key
 - `DocIdMap`: see [DocId Map CIP](https://github.com/ceramicnetwork/CIP/issues/51)
 - `StringMap`: see [String Map CIP](https://github.com/ceramicnetwork/CIP/issues/50)
 
+### schemasList
+
+An array of `SchemaItem` of the exported `schemas`
+
+## API
+
 ### isSchemaSecure
 
 **Arguments**
 
-1. `schema: Record<string, any>`: the JSON schema definition
+1. `schema: Record<string, unknown>`: the JSON schema definition
 
 **Returns** `boolean`
 
