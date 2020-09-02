@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Definition",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "name",
+      "maxLength": 150
+    },
+    "schema": {
+      "$ref": "#/definitions/CeramicDocId"
+    },
+    "description": {
+      "type": "string",
+      "title": "description",
+      "maxLength": 420
+    },
+    "url": {
+      "type": "string",
+      "title": "url",
+      "maxLength": 240
+    },
+    "config": {
+      "type": "object"
+    }
+  },
+  "definitions": {
+    "CeramicDocId": {
+      "type": "string",
+      "pattern": "^ceramic://.+(\\?version=.+)?",
+      "maxLength": 150
+    }
+  }
+}
