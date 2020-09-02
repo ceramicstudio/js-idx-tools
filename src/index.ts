@@ -1,9 +1,9 @@
 import { CeramicApi } from '@ceramicnetwork/ceramic-common'
 
 import * as schemas from './schemas'
-import { isSchemaSecure } from './validate'
+import { isSchemaSecure, validateSchema } from './validate'
 
-export { schemas, isSchemaSecure }
+export { schemas, isSchemaSecure, validateSchema }
 
 export interface SchemaItem {
   docId?: string

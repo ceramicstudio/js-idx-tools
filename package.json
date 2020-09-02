@@ -1,6 +1,6 @@
 {
   "name": "@ceramicstudio/idx-schemas",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "license": "MIT",
   "author": "Paul Le Cam <paul@3box.io>",
   "main": "dist/index.js",
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@ceramicnetwork/ceramic-common": "^0.5.9",
-    "@types/jest": "^26.0.12",
+    "@types/jest": "^26.0.13",
     "eslint": "^7.8.1",
     "eslint-config-3box": "^0.1.2",
     "husky": "^4.2.5",
