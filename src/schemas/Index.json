@@ -1,12 +1,20 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "name": "ListCollection",
+  "title": "Index",
+  "propertyNames": {
+    "pattern": "^ceramic://.+",
+    "maxLength": 100
+  },
   "properties": {
-    "list": {
+    "ref": {
+      "$ref": "#/definitions/CeramicDocId"
+    },
+    "tags": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/CeramicDocId"
+        "type": "string",
+        "maxLength": 50
       }
     }
   },

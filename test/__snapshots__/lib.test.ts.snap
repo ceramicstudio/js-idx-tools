@@ -6,8 +6,7 @@ Object {
   "Definition": "ceramic://bafyreifnca4abmdqt7wufxamm64xzm3hlpe2y2svkbewu3fo67vbrw73la",
   "DocIdDocIdMap": "ceramic://bafyreiecbrz74m4ptvpadfhtriuh5f2g5xe3pzhp5iugs4reiiw6bq5yxi",
   "DocIdMap": "ceramic://bafyreid7hbhnxcqyjs52grytmbsliaglvmkvdc3od3jfho34fp4f7akjsm",
-  "ListCollection": "ceramic://bafyreifkyatlj7kcs3t55hubbgvm5khwte2jwvjjfr6qrvvcfdow5x622m",
-  "MapCollection": "ceramic://bafyreica3bnkgme5pejbjw4gufzx3pcp5lvy2fufk2ztexg3bnjz7qzvri",
+  "Index": "ceramic://bafyreih6nj33ykk75jbnxxkqraxoyi42cpo5kdzk4soqzx3bbfzjehm5jm",
   "StringMap": "ceramic://bafyreiagoofia7nmr4k6syboj6ckqft6utu2ne5k4d36vzh4udndglxety",
 }
 `;
