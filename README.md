@@ -79,4 +79,4 @@ Creates or updates schemas on the Ceramic network
 
 ## License
 
-MIT
+Apache-2.0 OR MIT
