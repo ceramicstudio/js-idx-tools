@@ -2,11 +2,11 @@
 
 exports[`lib publishSchemas 1`] = `
 Object {
-  "BasicProfile": "ceramic://bafyreibaqfnywxojlctrocccv5kmofgilpqhex4spfbp6sd3ortmrl3e2q",
-  "Definition": "ceramic://bafyreifnca4abmdqt7wufxamm64xzm3hlpe2y2svkbewu3fo67vbrw73la",
-  "DocIdDocIdMap": "ceramic://bafyreiecbrz74m4ptvpadfhtriuh5f2g5xe3pzhp5iugs4reiiw6bq5yxi",
-  "DocIdMap": "ceramic://bafyreid7hbhnxcqyjs52grytmbsliaglvmkvdc3od3jfho34fp4f7akjsm",
-  "Index": "ceramic://bafyreih6nj33ykk75jbnxxkqraxoyi42cpo5kdzk4soqzx3bbfzjehm5jm",
-  "StringMap": "ceramic://bafyreiagoofia7nmr4k6syboj6ckqft6utu2ne5k4d36vzh4udndglxety",
+  "BasicProfile": "ceramic://bafyreihmutf7idaqdb2qwmzlr7b6kquok2fatp4uyh23kltz5mpugvkxwe",
+  "Definition": "ceramic://bafyreiflk27tgz4qe75vtjwwbbdxo5fvlgf3k5k4zjld5uzw2pcq3uduyu",
+  "DocIdDocIdMap": "ceramic://bafyreiajuwhfx2bddyktginaax6fjkezgkh5iukubk6puz7lfhp22ylbyu",
+  "DocIdMap": "ceramic://bafyreibh4fhj4xfwcj6a7ztrprdffnoy3lib5ixai53ifapjwfs7f2flai",
+  "Index": "ceramic://bafyreidrsjacbnv2h3vwvyi4t2gnxqur2fsl36bzkta35dz4sq55v7nxsm",
+  "StringMap": "ceramic://bafyreiezvppf2ncm2mfwtmys4novtp3x4q4mfbv4b5m7ysdld4nz4ky3xy",
 }
 `;
