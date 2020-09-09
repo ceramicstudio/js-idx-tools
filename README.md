@@ -38,8 +38,10 @@ interface PublishConfig {
 A record of all the JSON schemas defined and used by IDX, with the following keys:
 
 - `BasicProfile`: see [Basic Profile CIP](https://github.com/ceramicnetwork/CIP/issues/32)
+- `Definition` (CIP to be defined)
 - `DocIdDocIdMap`: see [DocId to DocId Map CIP](https://github.com/ceramicnetwork/CIP/issues/54)
 - `DocIdMap`: see [DocId Map CIP](https://github.com/ceramicnetwork/CIP/issues/51)
+- `RootIndex` (CIP to be defined)
 - `StringMap`: see [String Map CIP](https://github.com/ceramicnetwork/CIP/issues/50)
 
 ### schemasList
