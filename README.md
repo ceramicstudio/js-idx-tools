@@ -41,7 +41,7 @@ A record of all the JSON schemas defined and used by IDX, with the following key
 - `Definition` (CIP to be defined)
 - `DocIdDocIdMap`: see [DocId to DocId Map CIP](https://github.com/ceramicnetwork/CIP/issues/54)
 - `DocIdMap`: see [DocId Map CIP](https://github.com/ceramicnetwork/CIP/issues/51)
-- `RootIndex` (CIP to be defined)
+- `IdentityIndex` see [Identity Index CIP](https://github.com/ceramicnetwork/CIP/issues/3)
 - `StringMap`: see [String Map CIP](https://github.com/ceramicnetwork/CIP/issues/50)
 
 ### schemasList
