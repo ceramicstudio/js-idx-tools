@@ -7,7 +7,7 @@ declare global {
 }
 
 describe('lib', () => {
-  const DocID = expect.stringMatching(/^ceramic:\/\/[0-9a-z]+$/)
+  const DocID = expect.stringMatching(/^ceramic:\/\/[0-9a-z]+$/) as jest.Expect
 
   test('publishSchemas', async () => {
     const res = await publishSchemas({ ceramic, schemas: schemasList })
