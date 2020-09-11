@@ -7,8 +7,17 @@ declare global {
 }
 
 describe('lib', () => {
+  const DocID = expect.stringMatching(/^ceramic:\/\/[0-9a-z]+$/)
+
   test('publishSchemas', async () => {
     const res = await publishSchemas({ ceramic, schemas: schemasList })
-    expect(res).toMatchSnapshot()
+    expect(res).toEqual({
+      BasicProfile: DocID,
+      Definition: DocID,
+      DocIdDocIdMap: DocID,
+      DocIdMap: DocID,
+      IdentityIndex: DocID,
+      StringMap: DocID,
+    })
   })
 })
