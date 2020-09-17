@@ -1,9 +1,9 @@
-# IDX schemas
+# IDX tools
 
 ## Installation
 
 ```sh
-npm install @ceramicstudio/idx-schemas
+npm install @ceramicstudio/idx-tools
 ```
 
 ## Interfaces and types
@@ -38,6 +38,7 @@ interface PublishConfig {
 A record of all the JSON schemas defined and used by IDX, with the following keys:
 
 - `BasicProfile`: see [Basic Profile CIP](https://github.com/ceramicnetwork/CIP/issues/32)
+- `CryptoAccountLinks`: see [Crypto Account Links CIP](https://github.com/ceramicnetwork/CIP/issues/44)
 - `Definition` (CIP to be defined)
 - `DocIdDocIdMap`: see [DocId to DocId Map CIP](https://github.com/ceramicnetwork/CIP/issues/54)
 - `DocIdMap`: see [DocId Map CIP](https://github.com/ceramicnetwork/CIP/issues/51)
