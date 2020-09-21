@@ -18,6 +18,7 @@ describe('lib', () => {
       DocIdMap: DocID,
       IdentityIndex: DocID,
       StringMap: DocID,
+      CryptoAccountLinks: DocID,
     })
   })
 })
