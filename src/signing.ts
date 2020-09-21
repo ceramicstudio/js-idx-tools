@@ -1,7 +1,7 @@
 import type { DagJWSResult, DID } from 'dids'
 
 import * as schemas from './schemas'
-import { Definition, DocID, IDXSignedSchemas, Schema } from './types'
+import type { Definition, DocID, IDXSignedSchemas, Schema } from './types'
 import { promiseMap } from './utils'
 
 export async function signTile<T = unknown>(
@@ -30,5 +30,8 @@ export async function signIDXDefinitions(
 }
 
 export async function signIDXSchemas(did: DID): Promise<IDXSignedSchemas> {
-  return await promiseMap(schemas, (schema: Schema) => signTile(did, schema))
+  return await promiseMap(schemas, async (schema: Schema) => {
+    // eslint-disable-next-line
+    return await signTile(did, schema)
+  })
 }

@@ -1,7 +1,7 @@
 import CID from 'cids'
 import type { DagJWS, DagJWSResult } from 'dids'
 
-import { EncodedDagJWS, EncodedDagJWSResult } from './types'
+import type { EncodedDagJWS, EncodedDagJWSResult } from './types'
 import { applyMap } from './utils'
 
 export function decodeDagJWS({ payload, signatures, link }: EncodedDagJWS): DagJWS {

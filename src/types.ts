@@ -28,7 +28,7 @@ export interface EncodedDagJWSResult {
 type SignedRecord<K extends string> = Record<K, DagJWSResult>
 type PublishedRecord<K extends string> = Record<K, DocID>
 
-export type IDXDefinitionName = 'idxBasicProfile'
+export type IDXDefinitionName = 'basicProfile' | 'cryptoAccountLinks'
 export type IDXSignedDefinitions = SignedRecord<IDXDefinitionName>
 export type IDXPublishedDefinitions = PublishedRecord<IDXDefinitionName>
 

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment ceramic
+ */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { CeramicApi } from '@ceramicnetwork/ceramic-common'
@@ -68,19 +71,20 @@ describe('lib', () => {
       DocIdMap: DocID,
       IdentityIndex: DocID,
       StringMap: DocID,
-      CryptoAccountLinks: DocID,
     })
 
     // Create and sign the definitions, we need the published schemas DocIDs for this
     const signedDefinitions = await createIDXSignedDefinitions(did, publishedSchemas)
     expect(signedDefinitions).toEqual({
-      idxBasicProfile: DagJWSResult,
+      basicProfile: DagJWSResult,
+      cryptoAccountLinks: DagJWSResult,
     })
 
     // Publish the definitions to Ceramic
     const publishedDefinitions = await publishIDXSignedDefinitions(ceramic, signedDefinitions)
     expect(publishedDefinitions).toEqual({
-      idxBasicProfile: DocID,
+      basicProfile: DocID,
+      cryptoAccountLinks: DocID,
     })
   })
 })
