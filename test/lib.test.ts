@@ -12,12 +12,13 @@ import {
   publishIDXSignedDefinitions,
   publishIDXSignedSchemas,
   signIDXSchemas,
-} from '../src'
+} from '..'
 
 const SEED = '0x08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0'
 
 declare global {
   const ceramic: CeramicApi
+  const wallet: Wallet
 }
 
 describe('lib', () => {

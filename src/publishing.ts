@@ -38,14 +38,14 @@ export async function publishDoc<T = unknown>(
   doc: PublishDoc<T>
 ): Promise<DocID> {
   if (doc.id == null) {
-    return await createTile(ceramic, doc.content, { schema: doc.schema })
+    return await createTile(ceramic, doc.content, { owners: doc.owners, schema: doc.schema })
   }
 
   const loaded = await ceramic.loadDocument(doc.id)
   if (!isEqual(loaded.content, doc.content)) {
     await loaded.change({ content: doc.content })
   }
-  return loaded.id
+  return doc.id
 }
 
 export async function publishGenesis(ceramic: CeramicApi, genesis: DagJWSResult): Promise<DocID> {

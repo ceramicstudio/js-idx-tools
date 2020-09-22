@@ -1,6 +1,6 @@
 {
   "name": "@ceramicstudio/idx-tools",
-  "version": "0.1.5",
+  "version": "0.1.0",
   "license": "(Apache-2.0 OR MIT)",
   "author": "Paul Le Cam <paul@3box.io>",
   "main": "dist/index.js",
@@ -16,7 +16,7 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
-    "test": "tsdx test",
+    "test": "tsdx test --runInBand",
     "lint": "tsdx lint src test",
     "prepare": "tsdx build"
   },
