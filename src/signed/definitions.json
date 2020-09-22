@@ -1,0 +1,28 @@
+{
+  "basicProfile": {
+    "jws": {
+      "payload": "AXESIP6OxrODYDBeFHPV80uMDd1lHeYHZE2cFF9-KGFPOicx",
+      "signatures": [
+        {
+          "protected": "eyJraWQiOiJkaWQ6MzpiYWZ5cmVpZng2dnphZ2Q0eGxsdzZtejVpZ3o1Z2J0bTI1aHo2M3Y2d2JwanFyZ2pjM21rNTR1Nmc1YT92ZXJzaW9uLWlkPTAjc2lnbmluZyIsImFsZyI6IkVTMjU2SyJ9",
+          "signature": "gNg2gyJLlv41l8YErL2DWd0DSS9OB-trZ8bDEk5IN0f9OaJ0jUw_M0oHCO5mzgYrHGCbjPZkndZRxuxFGcNlTg"
+        }
+      ],
+      "link": "bafyreih6r3dlha3agbpbi46v6nfyydo5muo6mb3ejwobix36fbqu6orhge"
+    },
+    "linkedBlock": "o2RkYXRhomRuYW1lbUJhc2ljIFByb2ZpbGVmc2NoZW1heEdjZXJhbWljOi8vYmFnY3FjZXJhcnBicW10Mmhrc2FwcDM2Zng2bnhmbDN5a3QzbGthandqaHl2a242MnFhNXZuY2RiYWVwcWZoZWFkZXKiZm93bmVyc4F4QWRpZDozOmJhZnlyZWlmeDZ2emFnZDR4bGx3Nm16NWlnejVnYnRtMjVoejYzdjZ3YnBqcXJnamMzbWs1NHU2ZzVhZnNjaGVtYXhHY2VyYW1pYzovL2JhZ2NxY2VyYWdndnM1dXVtdWM2dWl2eHduMzQya3Rmbmg2cmdicDRjeGRsNjJmbmljaXhlc2hkZWxxa3FnZG9jdHlwZWR0aWxl"
+  },
+  "cryptoAccountLinks": {
+    "jws": {
+      "payload": "AXESIGxPO2-JlRtRnK15prkFsZmC8ZEuht4UFK6LE9CkD3mD",
+      "signatures": [
+        {
+          "protected": "eyJraWQiOiJkaWQ6MzpiYWZ5cmVpZng2dnphZ2Q0eGxsdzZtejVpZ3o1Z2J0bTI1aHo2M3Y2d2JwanFyZ2pjM21rNTR1Nmc1YT92ZXJzaW9uLWlkPTAjc2lnbmluZyIsImFsZyI6IkVTMjU2SyJ9",
+          "signature": "8d2AZfmacU9jz3_mOad5fkEvAqtZ8Zju38z9rloP_1F69E0cLkldEoRen72gUSkYHAqPznODHTeVXP2sWNTzcA"
+        }
+      ],
+      "link": "bafyreidmj45w7cmvdnizzllzu24qlmmzqlyzclug3ykbjlulcpikid3zqm"
+    },
+    "linkedBlock": "o2RkYXRhomRuYW1ldENyeXB0byBBY2NvdW50IExpbmtzZnNjaGVtYXhHY2VyYW1pYzovL2JhZ2NxY2VyYTR1ZzRpdnQ1c2hnZjZ6azV6ZWhkcHZ6NXljejV4czNmNWZseWk2cTV0bWxsb2J1cjU1d2FmaGVhZGVyomZvd25lcnOBeEFkaWQ6MzpiYWZ5cmVpZng2dnphZ2Q0eGxsdzZtejVpZ3o1Z2J0bTI1aHo2M3Y2d2JwanFyZ2pjM21rNTR1Nmc1YWZzY2hlbWF4R2NlcmFtaWM6Ly9iYWdjcWNlcmFnZ3ZzNXV1bXVjNnVpdnh3bjM0Mmt0Zm5oNnJnYnA0Y3hkbDYyZm5pY2l4ZXNoZGVscWtxZ2RvY3R5cGVkdGlsZQ=="
+  }
+}
