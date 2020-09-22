@@ -1,9 +1,4 @@
-const {
-  publishIDXSignedDefinitions,
-  publishIDXSignedSchemas,
-  signedDefinitions,
-  signedSchemas,
-} = require('..')
+const { publishIDXConfig } = require('..')
 const { ceramic, createWallet, logJSON } = require('./common')
 
 async function run() {
@@ -11,13 +6,9 @@ async function run() {
   await ceramic.setDIDProvider(wallet.getDidProvider())
   console.log('Connected to Ceramic')
 
-  const schemas = await publishIDXSignedSchemas(ceramic, signedSchemas)
-  console.log('Schemas published')
-  logJSON(schemas)
-
-  const definitions = await publishIDXSignedDefinitions(ceramic, signedDefinitions)
-  console.log('Definitions published')
-  logJSON(definitions)
+  const config = await publishIDXConfig(ceramic)
+  console.log('IDX config published:')
+  logJSON(config)
 
   process.exit(0)
 }

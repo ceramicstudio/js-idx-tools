@@ -2,9 +2,11 @@ import type { CeramicApi, DocMetadata } from '@ceramicnetwork/ceramic-common'
 import type { DagJWSResult } from 'dids'
 import isEqual from 'fast-deep-equal'
 
+import { signedDefinitions, signedSchemas } from './signed'
 import type {
   DefinitionDoc,
   DocID,
+  IDXPublishedConfig,
   IDXPublishedDefinitions,
   IDXPublishedSchemas,
   IDXSignedDefinitions,
@@ -74,14 +76,22 @@ export async function publishSignedMap<T extends string = string>(
 
 export async function publishIDXSignedDefinitions(
   ceramic: CeramicApi,
-  signedDefinitions: IDXSignedDefinitions
+  definitions: IDXSignedDefinitions = signedDefinitions
 ): Promise<IDXPublishedDefinitions> {
-  return await publishSignedMap(ceramic, signedDefinitions)
+  return await publishSignedMap(ceramic, definitions)
 }
 
 export async function publishIDXSignedSchemas(
   ceramic: CeramicApi,
-  signedSchemas: IDXSignedSchemas
+  schemas: IDXSignedSchemas = signedSchemas
 ): Promise<IDXPublishedSchemas> {
-  return await publishSignedMap(ceramic, signedSchemas)
+  return await publishSignedMap(ceramic, schemas)
+}
+
+export async function publishIDXConfig(ceramic: CeramicApi): Promise<IDXPublishedConfig> {
+  const [definitions, schemas] = await Promise.all([
+    publishIDXSignedDefinitions(ceramic),
+    publishIDXSignedSchemas(ceramic),
+  ])
+  return { definitions, schemas }
 }

@@ -36,6 +36,11 @@ export type IDXSchemaName = keyof typeof schemas
 export type IDXSignedSchemas = SignedRecord<IDXSchemaName>
 export type IDXPublishedSchemas = PublishedRecord<IDXSchemaName>
 
+export interface IDXPublishedConfig {
+  definitions: IDXPublishedDefinitions
+  schemas: IDXPublishedSchemas
+}
+
 export interface PublishDoc<T = unknown> {
   id?: DocID
   content: T
