@@ -15,7 +15,7 @@ import type {
   SchemaDoc,
 } from './types'
 import { promiseMap } from './utils'
-import { isSchemaSecure } from './validate'
+import { validateSchema } from './validate'
 
 export async function createTile<T = unknown>(
   ceramic: CeramicApi,
@@ -61,8 +61,8 @@ export async function publishDefinition(ceramic: CeramicApi, doc: DefinitionDoc)
 }
 
 export async function publishSchema(ceramic: CeramicApi, doc: SchemaDoc): Promise<string> {
-  if (!isSchemaSecure(doc.content)) {
-    throw new Error(`Schema ${doc.name} is not secure`)
+  if (!validateSchema(doc.content)) {
+    throw new Error(`Schema ${doc.name} is invalid or not secure`)
   }
   return await publishDoc(ceramic, doc)
 }

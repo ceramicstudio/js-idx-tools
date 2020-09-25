@@ -56,10 +56,7 @@ describe('lib', () => {
       BasicProfile: DagJWSResult,
       CryptoAccountLinks: DagJWSResult,
       Definition: DagJWSResult,
-      DocIdDocIdMap: DagJWSResult,
-      DocIdMap: DagJWSResult,
       IdentityIndex: DagJWSResult,
-      StringMap: DagJWSResult,
     })
 
     // Publish the signed schemas to Ceramic, no need to be the authoring DID
@@ -68,10 +65,7 @@ describe('lib', () => {
       BasicProfile: DocID,
       CryptoAccountLinks: DocID,
       Definition: DocID,
-      DocIdDocIdMap: DocID,
-      DocIdMap: DocID,
       IdentityIndex: DocID,
-      StringMap: DocID,
     })
 
     // Create and sign the definitions, we need the published schemas DocIDs for this
