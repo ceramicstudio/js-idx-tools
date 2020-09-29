@@ -2,8 +2,10 @@ import type { CeramicApi, DocMetadata } from '@ceramicnetwork/ceramic-common'
 import type { DagJWSResult } from 'dids'
 import isEqual from 'fast-deep-equal'
 
+import { publishedSchemas } from './constants'
 import { signedDefinitions, signedSchemas } from './signed'
 import type {
+  Definition,
   DefinitionDoc,
   DocID,
   IDXPublishedConfig,
@@ -50,14 +52,30 @@ export async function publishDoc<T = unknown>(
   return doc.id
 }
 
+export async function createDefinition(
+  ceramic: CeramicApi,
+  definition: Definition
+): Promise<DocID> {
+  return await createTile(ceramic, definition, { schema: publishedSchemas.Definition })
+}
+
+export async function updateDefinition(ceramic: CeramicApi, doc: DefinitionDoc): Promise<boolean> {
+  const loaded = await ceramic.loadDocument(doc.id)
+  if (loaded.metadata.schema !== publishedSchemas.Definition) {
+    throw new Error('Document is not a valid Definition')
+  }
+
+  if (!isEqual(loaded.content, doc.content)) {
+    await loaded.change({ content: doc.content })
+    return true
+  }
+  return false
+}
+
 export async function publishGenesis(ceramic: CeramicApi, genesis: DagJWSResult): Promise<DocID> {
   const doc = await ceramic.createDocumentFromGenesis(genesis)
   await ceramic.pin.add(doc.id)
   return doc.id
-}
-
-export async function publishDefinition(ceramic: CeramicApi, doc: DefinitionDoc): Promise<DocID> {
-  return await publishDoc(ceramic, doc)
 }
 
 export async function publishSchema(ceramic: CeramicApi, doc: SchemaDoc): Promise<string> {
