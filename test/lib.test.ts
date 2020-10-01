@@ -9,6 +9,7 @@ import Wallet from 'identity-wallet'
 
 import {
   createIDXSignedDefinitions,
+  publishIDXConfig,
   publishIDXSignedDefinitions,
   publishIDXSignedSchemas,
   signIDXSchemas,
@@ -28,7 +29,13 @@ describe('lib', () => {
     linkedBlock: expect.any(Buffer),
   })
 
-  test('signing and publishing flow', async function () {
+  test.only('publish config', async () => {
+    jest.setTimeout(30000)
+    const config = await publishIDXConfig(ceramic)
+    console.log(config)
+  })
+
+  test('signing and publishing flow', async () => {
     const wallet = await Wallet.create({
       ceramic,
       seed: SEED,

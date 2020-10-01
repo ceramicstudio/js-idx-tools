@@ -1,22 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "title": "Index",
-  "propertyNames": {
-    "pattern": "^ceramic://.+",
-    "maxLength": 100
-  },
-  "properties": {
-    "ref": {
-      "$ref": "#/definitions/CeramicDocId"
-    },
-    "tags": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "maxLength": 50
-      }
-    }
+  "title": "IdentityIndex",
+  "additionalProperties": {
+    "$ref": "#/definitions/CeramicDocId"
   },
   "definitions": {
     "CeramicDocId": {
