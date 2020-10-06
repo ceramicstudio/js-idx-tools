@@ -1,6 +1,6 @@
 {
   "name": "@ceramicstudio/idx-tools",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "(Apache-2.0 OR MIT)",
   "author": "Paul Le Cam <paul@3box.io>",
   "main": "dist/index.js",
@@ -23,22 +23,23 @@
   "dependencies": {
     "ajv": "^6.12.5",
     "cids": "^1.0.1",
-    "fast-deep-equal": "^3.1.3"
+    "fast-deep-equal": "^3.1.3",
+    "uint8arrays": "^1.1.0"
   },
   "devDependencies": {
-    "@ceramicnetwork/ceramic-common": "^0.8.1",
-    "@ceramicnetwork/ceramic-http-client": "^0.6.1",
+    "@ceramicnetwork/ceramic-common": "^0.9.1-alpha.1",
+    "@ceramicnetwork/ceramic-http-client": "^0.6.4-alpha.1",
     "@types/jest": "^26.0.14",
-    "dids": "^0.6.2",
+    "dids": "^0.6.4",
     "eslint": "^7.10.0",
-    "eslint-config-3box": "^0.1.2",
+    "eslint-config-3box": "^0.2.0",
     "fs-extra": "^9.0.1",
     "husky": "^4.3.0",
-    "identity-wallet": "^2.0.0-alpha.9",
-    "jest-environment-ceramic": "^0.3.0",
+    "identity-wallet": "^2.0.0-alpha.11",
+    "jest-environment-ceramic": "^0.4.0",
     "prettier": "^2.1.2",
     "tsdx": "^0.14.0",
-    "tslib": "^2.0.1",
+    "tslib": "^2.0.2",
     "typescript": "^4.0.3"
   },
   "jest": {

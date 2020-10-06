@@ -10,8 +10,9 @@ import { schemas, signTile, signIDXDefinitions, signIDXSchemas } from '../src'
 describe('signing', () => {
   const DagJWSResult = expect.objectContaining({
     jws: expect.any(Object),
-    linkedBlock: expect.any(Buffer),
+    linkedBlock: expect.any(Uint8Array),
   })
+  const Records = expect.arrayContaining([DagJWSResult])
 
   let did: DID
   beforeAll(async () => {
@@ -36,14 +37,14 @@ describe('signing', () => {
       },
     })
     expect(signed).toEqual({
-      first: DagJWSResult,
-      second: DagJWSResult,
+      first: Records,
+      second: Records,
     })
   })
 
   it('signIDXSchemas', async () => {
     const expected = Object.keys(schemas).reduce((acc, name) => {
-      acc[name] = DagJWSResult
+      acc[name] = Records
       return acc
     }, {})
     const signed = await signIDXSchemas(did)

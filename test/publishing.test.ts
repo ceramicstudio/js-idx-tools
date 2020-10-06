@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { createTile, publishDoc, publishGenesis } from '../src'
+import { createTile, publishDoc, publishRecords } from '../src'
 
 describe('publishing', () => {
   describe('createTile', () => {
@@ -81,13 +81,21 @@ describe('publishing', () => {
     })
   })
 
-  test('publishGenesis', async () => {
+  test('publishRecords', async () => {
     const createDocument = jest.fn(() => Promise.resolve({ id: 'ceramic://docID' }))
+    const applyRecord = jest.fn(() => Promise.resolve({ id: 'ceramic://docID' }))
     const pinAdd = jest.fn(() => Promise.resolve())
-    const ceramic = { createDocumentFromGenesis: createDocument, pin: { add: pinAdd } } as any
+    const ceramic = {
+      createDocumentFromGenesis: createDocument,
+      applyRecord,
+      pin: { add: pinAdd },
+    } as any
 
-    await expect(publishGenesis(ceramic, { jws: {} } as any)).resolves.toBe('ceramic://docID')
-    expect(createDocument).toBeCalledWith({ jws: {} })
+    const records = [{ jws: {}, __genesis: true }, { jws: {} }, { jws: {} }]
+    await expect(publishRecords(ceramic, records as any)).resolves.toBe('ceramic://docID')
+    expect(createDocument).toBeCalledWith({ jws: {}, __genesis: true })
     expect(pinAdd).toBeCalledWith('ceramic://docID')
+    expect(applyRecord).toBeCalledTimes(2)
+    expect(applyRecord).toBeCalledWith('ceramic://docID', { jws: {} }, { applyOnly: true })
   })
 })

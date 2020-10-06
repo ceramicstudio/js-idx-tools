@@ -3,7 +3,7 @@ import type { DagJWSResult } from 'dids'
 import isEqual from 'fast-deep-equal'
 
 import { publishedSchemas } from './constants'
-import { signedDefinitions, signedSchemas } from './signed'
+import { signedDefinitions, signedDID, signedSchemas } from './signed'
 import type {
   Definition,
   DefinitionDoc,
@@ -72,9 +72,15 @@ export async function updateDefinition(ceramic: CeramicApi, doc: DefinitionDoc):
   return false
 }
 
-export async function publishGenesis(ceramic: CeramicApi, genesis: DagJWSResult): Promise<DocID> {
+export async function publishRecords(
+  ceramic: CeramicApi,
+  [genesis, ...updates]: Array<DagJWSResult>
+): Promise<DocID> {
   const doc = await ceramic.createDocumentFromGenesis(genesis)
   await ceramic.pin.add(doc.id)
+  for (const record of updates) {
+    await ceramic.applyRecord(doc.id, record, { applyOnly: true })
+  }
   return doc.id
 }
 
@@ -87,9 +93,9 @@ export async function publishSchema(ceramic: CeramicApi, doc: SchemaDoc): Promis
 
 export async function publishSignedMap<T extends string = string>(
   ceramic: CeramicApi,
-  signed: Record<T, DagJWSResult>
+  signed: Record<T, Array<DagJWSResult>>
 ): Promise<Record<T, DocID>> {
-  return await promiseMap(signed, async (genesis) => await publishGenesis(ceramic, genesis))
+  return await promiseMap(signed, async (records) => await publishRecords(ceramic, records))
 }
 
 export async function publishIDXSignedDefinitions(
@@ -97,6 +103,13 @@ export async function publishIDXSignedDefinitions(
   definitions: IDXSignedDefinitions = signedDefinitions
 ): Promise<IDXPublishedDefinitions> {
   return await publishSignedMap(ceramic, definitions)
+}
+
+export async function publishIDXSignedDID(
+  ceramic: CeramicApi,
+  records: Array<DagJWSResult> = signedDID
+): Promise<DocID> {
+  return await publishRecords(ceramic, records)
 }
 
 export async function publishIDXSignedSchemas(
@@ -107,6 +120,7 @@ export async function publishIDXSignedSchemas(
 }
 
 export async function publishIDXConfig(ceramic: CeramicApi): Promise<IDXPublishedConfig> {
+  await publishIDXSignedDID(ceramic)
   const [definitions, schemas] = await Promise.all([
     publishIDXSignedDefinitions(ceramic),
     publishIDXSignedSchemas(ceramic),

@@ -22,16 +22,14 @@ export async function signIDXDefinitions(
   did: DID,
   definitionSchema: DocID,
   definitions: Record<string, Definition>
-): Promise<Record<string, DagJWSResult>> {
+): Promise<Record<string, Array<DagJWSResult>>> {
   return await promiseMap(definitions, async (definition: Definition) => {
-    // eslint-disable-next-line
-    return await signTile(did, definition, definitionSchema)
+    return [await signTile(did, definition, definitionSchema)]
   })
 }
 
 export async function signIDXSchemas(did: DID): Promise<IDXSignedSchemas> {
   return await promiseMap(schemas, async (schema: Schema) => {
-    // eslint-disable-next-line
-    return await signTile(did, schema)
+    return [await signTile(did, schema)]
   })
 }
