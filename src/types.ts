@@ -25,7 +25,7 @@ export interface EncodedDagJWSResult {
   linkedBlock: string // base64
 }
 
-type SignedRecord<K extends string> = Record<K, DagJWSResult>
+type SignedRecord<K extends string> = Record<K, Array<DagJWSResult>>
 type PublishedRecord<K extends string> = Record<K, DocID>
 
 export type IDXDefinitionName = 'basicProfile' | 'cryptoAccountLinks'

@@ -10,8 +10,9 @@ import { createIDXDefinitions, createIDXSignedDefinitions } from '../src'
 describe('definitions', () => {
   const DagJWSResult = expect.objectContaining({
     jws: expect.any(Object),
-    linkedBlock: expect.any(Buffer),
+    linkedBlock: expect.any(Uint8Array),
   })
+  const Records = expect.arrayContaining([DagJWSResult])
 
   const schemas = {
     BasicProfile: 'ceramic://BasicProfileSchema',
@@ -35,8 +36,8 @@ describe('definitions', () => {
     const did = new DID({ provider: wallet.getDidProvider() })
     await did.authenticate()
     await expect(createIDXSignedDefinitions(did, schemas)).resolves.toEqual({
-      basicProfile: DagJWSResult,
-      cryptoAccountLinks: DagJWSResult,
+      basicProfile: Records,
+      cryptoAccountLinks: Records,
     })
   })
 })

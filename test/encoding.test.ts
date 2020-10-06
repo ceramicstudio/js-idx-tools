@@ -20,7 +20,7 @@ describe('encoding', () => {
   }
   const dagJWSResult = {
     jws: dagJWS,
-    linkedBlock: Buffer.allocUnsafe(32),
+    linkedBlock: new Uint8Array(32),
   }
 
   it('encodes and decodes DagJWS', () => {
@@ -36,7 +36,7 @@ describe('encoding', () => {
   })
 
   it('encodes and decodes signed map', () => {
-    const signedMap = { res: dagJWSResult }
+    const signedMap = { res: [dagJWSResult] }
     const encoded = encodeSignedMap(signedMap)
     const decoded = decodeSignedMap(encoded)
     expect(decoded).toEqual(signedMap)

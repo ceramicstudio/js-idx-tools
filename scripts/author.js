@@ -2,9 +2,15 @@ const { DID } = require('dids')
 const { resolve } = require('path')
 const Wallet = require('identity-wallet').default
 
-const { createIDXSignedDefinitions, publishIDXSignedSchemas, signIDXSchemas } = require('../dist')
-const { ceramic, writeSigned } = require('./common')
+const {
+  createIDXSignedDefinitions,
+  encodeDagJWSResult,
+  publishIDXSignedSchemas,
+  signIDXSchemas,
+} = require('../dist')
+const { ceramic, writeJSON, writeSigned } = require('./common')
 
+const DID_PATH = resolve(__dirname, '../src/signed/did.json')
 const DEFINITIONS_PATH = resolve(__dirname, '../src/signed/definitions.json')
 const SCHEMAS_PATH = resolve(__dirname, '../src/signed/schemas.json')
 
@@ -25,6 +31,12 @@ async function run() {
 
   await did.authenticate()
   console.log('DID authenticated')
+
+  const docID = did.id.replace('did:3:', 'ceramic://')
+  const records = await ceramic.loadDocumentRecords(docID)
+  const encodedDID = records.map((record) => encodeDagJWSResult(record.value))
+  await writeJSON(DID_PATH, encodedDID)
+  console.log(`DID written to ${DID_PATH}`)
 
   const signedSchemas = await signIDXSchemas(did)
   console.log('Schemas signed')

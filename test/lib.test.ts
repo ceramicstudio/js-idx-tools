@@ -26,13 +26,26 @@ describe('lib', () => {
   const DocID = expect.stringMatching(/^ceramic:\/\/[0-9a-z]+$/) as jest.Expect
   const DagJWSResult = expect.objectContaining({
     jws: expect.any(Object),
-    linkedBlock: expect.any(Buffer),
+    linkedBlock: expect.any(Uint8Array),
   })
+  const Records = expect.arrayContaining([DagJWSResult])
 
-  test.only('publish config', async () => {
-    jest.setTimeout(30000)
+  test('publish config', async () => {
+    jest.setTimeout(60000)
+
     const config = await publishIDXConfig(ceramic)
-    console.log(config)
+    expect(config).toEqual({
+      definitions: {
+        basicProfile: DocID,
+        cryptoAccountLinks: DocID,
+      },
+      schemas: {
+        BasicProfile: DocID,
+        CryptoAccountLinks: DocID,
+        Definition: DocID,
+        IdentityIndex: DocID,
+      },
+    })
   })
 
   test('signing and publishing flow', async () => {
@@ -60,10 +73,10 @@ describe('lib', () => {
     // First sign all the schemas using the DID
     const signedSchemas = await signIDXSchemas(did)
     expect(signedSchemas).toEqual({
-      BasicProfile: DagJWSResult,
-      CryptoAccountLinks: DagJWSResult,
-      Definition: DagJWSResult,
-      IdentityIndex: DagJWSResult,
+      BasicProfile: Records,
+      CryptoAccountLinks: Records,
+      Definition: Records,
+      IdentityIndex: Records,
     })
 
     // Publish the signed schemas to Ceramic, no need to be the authoring DID
@@ -78,8 +91,8 @@ describe('lib', () => {
     // Create and sign the definitions, we need the published schemas DocIDs for this
     const signedDefinitions = await createIDXSignedDefinitions(did, publishedSchemas)
     expect(signedDefinitions).toEqual({
-      basicProfile: DagJWSResult,
-      cryptoAccountLinks: DagJWSResult,
+      basicProfile: Records,
+      cryptoAccountLinks: Records,
     })
 
     // Publish the definitions to Ceramic

@@ -10,8 +10,12 @@ function logJSON(data) {
   console.log(inspect(data, { colors: true, depth: null }))
 }
 
-async function writeSigned(path, data) {
-  await outputJSON(path, encodeSignedMap(data), { spaces: 2 })
+async function writeJSON(path, data) {
+  await outputJSON(path, data, { spaces: 2 })
 }
 
-module.exports = { ceramic, logJSON, writeSigned }
+async function writeSigned(path, data) {
+  await writeJSON(path, encodeSignedMap(data))
+}
+
+module.exports = { ceramic, logJSON, writeJSON, writeSigned }
