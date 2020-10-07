@@ -12,6 +12,8 @@ import {
   publishIDXConfig,
   publishIDXSignedDefinitions,
   publishIDXSignedSchemas,
+  publishedDefinitions,
+  publishedSchemas,
   signIDXSchemas,
 } from '..'
 
@@ -35,16 +37,8 @@ describe('lib', () => {
 
     const config = await publishIDXConfig(ceramic)
     expect(config).toEqual({
-      definitions: {
-        basicProfile: DocID,
-        cryptoAccountLinks: DocID,
-      },
-      schemas: {
-        BasicProfile: DocID,
-        CryptoAccountLinks: DocID,
-        Definition: DocID,
-        IdentityIndex: DocID,
-      },
+      definitions: publishedDefinitions,
+      schemas: publishedSchemas,
     })
   })
 
@@ -80,8 +74,8 @@ describe('lib', () => {
     })
 
     // Publish the signed schemas to Ceramic, no need to be the authoring DID
-    const publishedSchemas = await publishIDXSignedSchemas(ceramic, signedSchemas)
-    expect(publishedSchemas).toEqual({
+    const schemas = await publishIDXSignedSchemas(ceramic, signedSchemas)
+    expect(schemas).toEqual({
       BasicProfile: DocID,
       CryptoAccountLinks: DocID,
       Definition: DocID,
@@ -96,8 +90,8 @@ describe('lib', () => {
     })
 
     // Publish the definitions to Ceramic
-    const publishedDefinitions = await publishIDXSignedDefinitions(ceramic, signedDefinitions)
-    expect(publishedDefinitions).toEqual({
+    const definitions = await publishIDXSignedDefinitions(ceramic, signedDefinitions)
+    expect(definitions).toEqual({
       basicProfile: DocID,
       cryptoAccountLinks: DocID,
     })
