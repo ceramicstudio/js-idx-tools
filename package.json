@@ -1,8 +1,9 @@
 {
   "name": "@ceramicstudio/idx-tools",
-  "version": "0.2.1",
+  "version": "0.2.2",
+  "author": "Ceramic Studio",
+  "homepage": "https://idx.xyz",
   "license": "(Apache-2.0 OR MIT)",
-  "author": "Paul Le Cam <paul@3box.io>",
   "main": "dist/index.js",
   "module": "dist/idx-tools.esm.js",
   "typings": "dist/index.d.ts",
@@ -23,7 +24,7 @@
     "analyze": "size-limit --why"
   },
   "dependencies": {
-    "ajv": "^6.12.5",
+    "ajv": "^6.12.6",
     "cids": "^1.0.1",
     "fast-deep-equal": "^3.1.3",
     "uint8arrays": "^1.1.0"
@@ -34,16 +35,16 @@
     "@size-limit/preset-small-lib": "^4.6.0",
     "@types/jest": "^26.0.14",
     "dids": "^0.6.4",
-    "eslint": "^7.10.0",
+    "eslint": "^7.11.0",
     "eslint-config-3box": "^0.2.0",
     "fs-extra": "^9.0.1",
     "husky": "^4.3.0",
-    "identity-wallet": "^2.0.0-alpha.11",
-    "jest-environment-ceramic": "^0.4.1",
+    "identity-wallet": "^2.0.0-alpha.13",
+    "jest-environment-ceramic": "^0.5.1",
     "prettier": "^2.1.2",
     "size-limit": "^4.6.0",
     "tsdx": "^0.14.0",
-    "tslib": "^2.0.2",
+    "tslib": "^2.0.1",
     "typescript": "^4.0.3"
   },
   "husky": {
