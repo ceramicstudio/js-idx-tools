@@ -62,11 +62,11 @@
   "size-limit": [
     {
       "path": "dist/idx-tools.cjs.production.min.js",
-      "limit": "10 KB"
+      "limit": "50 KB"
     },
     {
       "path": "dist/idx-tools.esm.js",
-      "limit": "20 KB"
+      "limit": "50 KB"
     }
   ]
 }

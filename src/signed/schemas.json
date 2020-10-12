@@ -29,6 +29,21 @@
       "linkedBlock": "o2RkYXRhpmR0eXBlZm9iamVjdGV0aXRsZXJDcnlwdG9BY2NvdW50TGlua3NnJHNjaGVtYXgnaHR0cDovL2pzb24tc2NoZW1hLm9yZy9kcmFmdC0wNy9zY2hlbWEjbXByb3BlcnR5TmFtZXOhaW1heExlbmd0aBkEAHFwYXR0ZXJuUHJvcGVydGllc6F4OF5bYS16QS1aMC05XXsxLDYzfUBbLWEtekEtWjAtOV17MywxNn06Wy1hLXpBLVowLTldezEsNDd9o2R0eXBlZnN0cmluZ2dwYXR0ZXJubV5jZXJhbWljOi8vLitpbWF4TGVuZ3RoGQQAdGFkZGl0aW9uYWxQcm9wZXJ0aWVz9GZoZWFkZXKiZm93bmVyc4F4Q2RpZDozOmJhZ2NxY2VyYXd2dzNsaXZwdGdkb3h2bXYydmJmeXlsdW01aXVrczZvdGh5Nm5nYzRyZHVvbzNwemkyc3Fmc2NoZW1h92dkb2N0eXBlZHRpbGU="
     }
   ],
+  "ThreeIdKeychain": [
+    {
+      "jws": {
+        "payload": "AXESIE69_OVhbnuDy_TfgX961Uy4PLu_LGA7NYswa2AAH6T-",
+        "signatures": [
+          {
+            "protected": "eyJraWQiOiJkaWQ6MzpiYWdjcWNlcmF3dnczbGl2cHRnZG94dm12MnZiZnl5bHVtNWl1a3M2b3RoeTZuZ2M0cmR1b28zcHppMnNxP3ZlcnNpb24taWQ9MCNzaWduaW5nIiwiYWxnIjoiRVMyNTZLIn0",
+            "signature": "CeO4ybzGn3ZhRtZ1E_Mp8ELmGRrpSQI5KlMneXDIHaWcq0gwKH0K3xKRiLnkJZQPJPOm6r33W019NcpnjUfnjg"
+          }
+        ],
+        "link": "bafyreicoxx6okylopob4x5g7qf7xvvkmxa6lxpzmma5tlczqnnqaah5e7y"
+      },
+      "linkedBlock": "o2RkYXRhpWR0eXBlZm9iamVjdGckc2NoZW1heCdodHRwOi8vanNvbi1zY2hlbWEub3JnL2RyYWZ0LTA3L3NjaGVtYSNqcHJvcGVydGllc6JnYXV0aE1hcKJkdHlwZWZvYmplY3R0YWRkaXRpb25hbFByb3BlcnRpZXOhZCRyZWZ2Iy9kZWZpbml0aW9ucy9BdXRoRGF0YWlwYXN0U2VlZHOiZHR5cGVlYXJyYXllaXRlbXOhZCRyZWZxIy9kZWZpbml0aW9ucy9KV0VrZGVmaW5pdGlvbnOjY0pXRaNkdHlwZWZvYmplY3RocmVxdWlyZWSEaXByb3RlY3RlZGN0YWdqY2lwaGVydGV4dGJpdmpwcm9wZXJ0aWVzpWJpdqFkdHlwZWZzdHJpbmdjdGFnoWR0eXBlZnN0cmluZ2lwcm90ZWN0ZWShZHR5cGVmc3RyaW5namNpcGhlcnRleHShZHR5cGVmc3RyaW5nanJlY2lwaWVudHOhZHR5cGVlYXJyYXloQXV0aERhdGGjZHR5cGVmb2JqZWN0anByb3BlcnRpZXOjYmlkoWQkcmVmeBgjL2RlZmluaXRpb25zL1dyYXBwZWRKV0VjcHVioWR0eXBlZnN0cmluZ2RkYXRhoWQkcmVmeBgjL2RlZmluaXRpb25zL1dyYXBwZWRKV0V0YWRkaXRpb25hbFByb3BlcnRpZXP0aldyYXBwZWRKV0WjZHR5cGVmb2JqZWN0anByb3BlcnRpZXOhY2p3ZaFkJHJlZnEjL2RlZmluaXRpb25zL0pXRXRhZGRpdGlvbmFsUHJvcGVydGllc/R0YWRkaXRpb25hbFByb3BlcnRpZXP0ZmhlYWRlcqJmb3duZXJzgXhDZGlkOjM6YmFnY3FjZXJhd3Z3M2xpdnB0Z2RveHZtdjJ2YmZ5eWx1bTVpdWtzNm90aHk2bmdjNHJkdW9vM3B6aTJzcWZzY2hlbWH3Z2RvY3R5cGVkdGlsZQ=="
+    }
+  ],
   "Definition": [
     {
       "jws": {

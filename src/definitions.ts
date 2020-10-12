@@ -20,6 +20,10 @@ export function createIDXDefinitions(
       name: 'Crypto Account Links',
       schema: schemas.CryptoAccountLinks,
     },
+    threeIdKeychain: {
+      name: '3ID Keychain',
+      schema: schemas.ThreeIdKeychain,
+    },
   }
 }
 

@@ -5,10 +5,11 @@ import { publishedDefinitions, publishedSchemas } from '../src'
 describe('constants', () => {
   const DocID = expect.stringMatching(/^ceramic:\/\/[0-9a-z]+$/)
 
-  test('publisheDefinitions', () => {
+  test('publishedDefinitions', () => {
     expect(publishedDefinitions).toEqual({
       basicProfile: DocID,
       cryptoAccountLinks: DocID,
+      threeIdKeychain: DocID,
     })
   })
 
@@ -18,6 +19,7 @@ describe('constants', () => {
       CryptoAccountLinks: DocID,
       Definition: DocID,
       IdentityIndex: DocID,
+      ThreeIdKeychain: DocID,
     })
   })
 })
