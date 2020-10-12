@@ -71,6 +71,7 @@ describe('lib', () => {
       CryptoAccountLinks: Records,
       Definition: Records,
       IdentityIndex: Records,
+      ThreeIdKeychain: Records,
     })
 
     // Publish the signed schemas to Ceramic, no need to be the authoring DID
@@ -80,6 +81,7 @@ describe('lib', () => {
       CryptoAccountLinks: DocID,
       Definition: DocID,
       IdentityIndex: DocID,
+      ThreeIdKeychain: DocID,
     })
 
     // Create and sign the definitions, we need the published schemas DocIDs for this
@@ -87,6 +89,7 @@ describe('lib', () => {
     expect(signedDefinitions).toEqual({
       basicProfile: Records,
       cryptoAccountLinks: Records,
+      threeIdKeychain: Records,
     })
 
     // Publish the definitions to Ceramic
@@ -94,6 +97,7 @@ describe('lib', () => {
     expect(definitions).toEqual({
       basicProfile: DocID,
       cryptoAccountLinks: DocID,
+      threeIdKeychain: DocID,
     })
   })
 })

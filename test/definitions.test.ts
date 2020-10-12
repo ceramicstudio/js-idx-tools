@@ -17,6 +17,7 @@ describe('definitions', () => {
   const schemas = {
     BasicProfile: 'ceramic://BasicProfileSchema',
     CryptoAccountLinks: 'ceramic://CryptoAccountLinksSchema',
+    ThreeIdKeychain: 'ceramic://ThreeIdKeychainSchema',
   } as any
 
   it('createIDXDefinitions', () => {
@@ -29,6 +30,10 @@ describe('definitions', () => {
         name: 'Crypto Account Links',
         schema: 'ceramic://CryptoAccountLinksSchema',
       },
+      threeIdKeychain: {
+        name: '3ID Keychain',
+        schema: 'ceramic://ThreeIdKeychainSchema',
+      },
     })
   })
 
@@ -38,6 +43,7 @@ describe('definitions', () => {
     await expect(createIDXSignedDefinitions(did, schemas)).resolves.toEqual({
       basicProfile: Records,
       cryptoAccountLinks: Records,
+      threeIdKeychain: Records,
     })
   })
 })
