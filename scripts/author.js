@@ -1,6 +1,7 @@
 const { DID } = require('dids')
 const { resolve } = require('path')
 const Wallet = require('identity-wallet').default
+const fromString = require('uint8arrays/from-string')
 
 const {
   createIDXSignedDefinitions,
@@ -14,26 +15,23 @@ const DID_PATH = resolve(__dirname, '../src/signed/did.json')
 const DEFINITIONS_PATH = resolve(__dirname, '../src/signed/definitions.json')
 const SCHEMAS_PATH = resolve(__dirname, '../src/signed/schemas.json')
 
-const seed = process.env.SEED
-if (!seed) {
+if (!process.env.SEED) {
   throw new Error('Missing SEED environment variable')
 }
 
 async function run() {
   const wallet = await await Wallet.create({
     ceramic,
-    seed,
+    seed: fromString(process.env.SEED),
     getPermission() {
       return Promise.resolve([])
     },
+    disableIDX: true,
   })
   const did = new DID({ provider: wallet.getDidProvider() })
-
   await did.authenticate()
-  console.log('DID authenticated')
 
-  const docID = did.id.replace('did:3:', 'ceramic://')
-  const records = await ceramic.loadDocumentRecords(docID)
+  const records = await ceramic.loadDocumentRecords(did.id.replace('did:3:', ''))
   const encodedDID = records.map((record) => encodeDagJWSResult(record.value))
   await writeJSON(DID_PATH, encodedDID)
   console.log(`DID written to ${DID_PATH}`)

@@ -1,30 +1,36 @@
+import type DocID from '@ceramicnetwork/docid'
 import type { DagJWSResult, DID } from 'dids'
 
 import * as schemas from './schemas'
-import type { Definition, DocID, IDXSignedSchemas, Schema } from './types'
-import { promiseMap } from './utils'
+import type { Definition, IDXSignedSchemas, Schema } from './types'
+import { docIDToString, promiseMap } from './utils'
 
 export async function signTile<T = unknown>(
   did: DID,
   data: T,
-  schema?: DocID
+  schema?: DocID | string
 ): Promise<DagJWSResult> {
   if (!did.authenticated) {
     throw new Error('DID must be authenticated')
   }
   return await did.createDagJWS(
-    { doctype: 'tile', data, header: { owners: [did.id], schema } },
+    {
+      doctype: 'tile',
+      data,
+      header: { controllers: [did.id], schema: schema ? docIDToString(schema) : undefined },
+    },
     { did: did.id }
   )
 }
 
 export async function signIDXDefinitions(
   did: DID,
-  definitionSchema: DocID,
+  definitionSchema: DocID | string,
   definitions: Record<string, Definition>
 ): Promise<Record<string, Array<DagJWSResult>>> {
+  const schema = docIDToString(definitionSchema)
   return await promiseMap(definitions, async (definition: Definition) => {
-    return [await signTile(did, definition, definitionSchema)]
+    return [await signTile(did, definition, schema)]
   })
 }
 

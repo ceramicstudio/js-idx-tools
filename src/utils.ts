@@ -1,3 +1,13 @@
+import DocID from '@ceramicnetwork/docid'
+
+export function docIDFromString(id: DocID | string): DocID {
+  return typeof id === 'string' ? DocID.fromString(id) : id
+}
+
+export function docIDToString(id: DocID | string): string {
+  return typeof id === 'string' ? id : id.toString()
+}
+
 export function applyMap<
   M extends Record<string, unknown>,
   V extends M[keyof M] = M[keyof M],

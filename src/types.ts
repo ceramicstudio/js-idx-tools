@@ -1,12 +1,11 @@
+import type DocID from '@ceramicnetwork/docid'
 import type { DagJWSResult, JWSSignature } from 'dids'
 
 import * as schemas from './schemas'
 
-export type DocID = string
-
 export interface Definition<T extends Record<string, unknown> = Record<string, unknown>> {
   name: string
-  schema: DocID
+  schema: string
   description?: string
   url?: string
   config?: T
@@ -26,7 +25,7 @@ export interface EncodedDagJWSResult {
 }
 
 type SignedRecord<K extends string> = Record<K, Array<DagJWSResult>>
-type PublishedRecord<K extends string> = Record<K, DocID>
+type PublishedRecord<K extends string> = Record<K, string>
 
 export type IDXDefinitionName = 'basicProfile' | 'cryptoAccountLinks' | 'threeIdKeychain'
 export type IDXSignedDefinitions = SignedRecord<IDXDefinitionName>
@@ -42,13 +41,13 @@ export interface IDXPublishedConfig {
 }
 
 export interface PublishDoc<T = unknown> {
-  id?: DocID
+  id?: DocID | string
   content: T
-  owners?: Array<string>
-  schema?: DocID
+  controllers?: Array<string>
+  schema?: DocID | string
 }
 export interface DefinitionDoc extends PublishDoc<Definition> {
-  id: DocID
+  id: DocID | string
 }
 export interface SchemaDoc extends PublishDoc<Schema> {
   name: string

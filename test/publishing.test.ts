@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
+import DocID from '@ceramicnetwork/docid'
+
 import { createTile, publishDoc, publishRecords } from '../src'
 
 describe('publishing', () => {
+  const testID = 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp60s'
+  const testDocID = DocID.fromString(testID)
+
   describe('createTile', () => {
     test('throw an error if the Ceramic instance is not authenticated', async () => {
       await expect(createTile({} as any, {})).rejects.toThrow(
@@ -10,80 +15,84 @@ describe('publishing', () => {
       )
     })
 
-    test('sets the authenticated DID as owner if not set in metadata', async () => {
-      const createDocument = jest.fn(() => Promise.resolve({ id: 'ceramic://docID' }))
+    test('sets the authenticated DID as controllers if not set in metadata', async () => {
+      const createDocument = jest.fn(() => Promise.resolve({ id: testDocID }))
       const pinAdd = jest.fn(() => Promise.resolve())
       const ceramic = { did: { id: 'did:test:123' }, createDocument, pin: { add: pinAdd } } as any
 
-      await createTile(ceramic, { hello: 'test' }, { schema: 'ceramic://schemaID' })
+      await createTile(ceramic, { hello: 'test' }, { schema: testID })
       expect(createDocument).toBeCalledWith('tile', {
         content: { hello: 'test' },
-        metadata: { owners: ['did:test:123'], schema: 'ceramic://schemaID' },
+        metadata: { controllers: ['did:test:123'], schema: testID },
       })
-      expect(pinAdd).toBeCalledWith('ceramic://docID')
+      expect(pinAdd).toBeCalledWith(testDocID)
     })
 
-    test('sets the provided owners', async () => {
-      const createDocument = jest.fn(() => Promise.resolve({ id: 'ceramic://docID' }))
+    test('sets the provided controllers', async () => {
+      const createDocument = jest.fn(() => Promise.resolve({ id: testDocID }))
       const pinAdd = jest.fn()
       const ceramic = { did: { id: 'did:test:123' }, createDocument, pin: { add: pinAdd } } as any
 
-      await createTile(ceramic, { hello: 'test' }, { owners: ['did:test:456'] })
+      await createTile(ceramic, { hello: 'test' }, { controllers: ['did:test:456'] })
       expect(createDocument).toBeCalledWith('tile', {
         content: { hello: 'test' },
-        metadata: { owners: ['did:test:456'] },
+        metadata: { controllers: ['did:test:456'] },
       })
     })
   })
 
   describe('publishDoc', () => {
     test('creates the document if the DocID is not provided', async () => {
-      const createDocument = jest.fn(() => Promise.resolve({ id: 'ceramic://docID' }))
+      const createDocument = jest.fn(() => Promise.resolve({ id: testDocID }))
       const pinAdd = jest.fn(() => Promise.resolve())
       const ceramic = { did: { id: 'did:test:123' }, createDocument, pin: { add: pinAdd } } as any
 
       await expect(
         publishDoc(ceramic, {
           content: { hello: 'test' },
-          owners: ['did:test:456'],
-          schema: 'ceramic://schemaID',
+          controllers: ['did:test:456'],
+          schema: testID,
         })
-      ).resolves.toBe('ceramic://docID')
+      ).resolves.toBe(testDocID)
       expect(createDocument).toBeCalledWith('tile', {
         content: { hello: 'test' },
-        metadata: { owners: ['did:test:456'], schema: 'ceramic://schemaID' },
+        metadata: { controllers: ['did:test:456'], schema: testID },
       })
-      expect(pinAdd).toBeCalledWith('ceramic://docID')
+      expect(pinAdd).toBeCalledWith(testDocID)
     })
 
     test('updates the document if contents changed', async () => {
       const change = jest.fn()
-      const loadDocument = jest.fn(() => Promise.resolve({ content: { hello: 'world' }, change }))
+      const loadDocument = jest.fn(() => {
+        return Promise.resolve({ content: { hello: 'world' }, change, id: testDocID })
+      })
       const ceramic = { loadDocument } as any
 
-      await expect(
-        publishDoc(ceramic, { id: 'ceramic://docID', content: { hello: 'test' } })
-      ).resolves.toBe('ceramic://docID')
-      expect(loadDocument).toBeCalledWith('ceramic://docID')
+      await expect(publishDoc(ceramic, { id: testID, content: { hello: 'test' } })).resolves.toBe(
+        testDocID
+      )
+      expect(loadDocument).toBeCalledWith(testID)
       expect(change).toBeCalledWith({ content: { hello: 'test' } })
     })
 
     test('does not update the document if contents have not changed', async () => {
       const change = jest.fn()
-      const loadDocument = jest.fn(() => Promise.resolve({ content: { hello: 'test' }, change }))
+      const loadDocument = jest.fn(() => {
+        return Promise.resolve({ content: { hello: 'test' }, change, id: testDocID })
+      })
       const ceramic = { loadDocument } as any
 
-      await expect(
-        publishDoc(ceramic, { id: 'ceramic://docID', content: { hello: 'test' } })
-      ).resolves.toBe('ceramic://docID')
-      expect(loadDocument).toBeCalledWith('ceramic://docID')
+      await expect(publishDoc(ceramic, { id: testID, content: { hello: 'test' } })).resolves.toBe(
+        testDocID
+      )
+      expect(loadDocument).toBeCalledWith(testID)
       expect(change).not.toBeCalled()
     })
   })
 
   test('publishRecords', async () => {
-    const createDocument = jest.fn(() => Promise.resolve({ id: 'ceramic://docID' }))
-    const applyRecord = jest.fn(() => Promise.resolve({ id: 'ceramic://docID' }))
+    const createDocument = jest.fn(() => Promise.resolve({ id: testDocID }))
+    const applyRecord = jest.fn(() => Promise.resolve({ id: testDocID }))
     const pinAdd = jest.fn(() => Promise.resolve())
     const ceramic = {
       createDocumentFromGenesis: createDocument,
@@ -92,10 +101,10 @@ describe('publishing', () => {
     } as any
 
     const records = [{ jws: {}, __genesis: true }, { jws: {} }, { jws: {} }]
-    await expect(publishRecords(ceramic, records as any)).resolves.toBe('ceramic://docID')
+    await expect(publishRecords(ceramic, records as any)).resolves.toBe(testDocID)
     expect(createDocument).toBeCalledWith({ jws: {}, __genesis: true })
-    expect(pinAdd).toBeCalledWith('ceramic://docID')
+    expect(pinAdd).toBeCalledWith(testDocID)
     expect(applyRecord).toBeCalledTimes(2)
-    expect(applyRecord).toBeCalledWith('ceramic://docID', { jws: {} }, { applyOnly: true })
+    expect(applyRecord).toBeCalledWith(testDocID, { jws: {} }, { applyOnly: true })
   })
 })

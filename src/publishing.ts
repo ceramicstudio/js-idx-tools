@@ -1,4 +1,5 @@
 import type { CeramicApi, DocMetadata } from '@ceramicnetwork/ceramic-common'
+import type DocID from '@ceramicnetwork/docid'
 import type { DagJWSResult } from 'dids'
 import isEqual from 'fast-deep-equal'
 
@@ -7,16 +8,17 @@ import { signedDefinitions, signedDID, signedSchemas } from './signed'
 import type {
   Definition,
   DefinitionDoc,
-  DocID,
+  IDXDefinitionName,
   IDXPublishedConfig,
   IDXPublishedDefinitions,
   IDXPublishedSchemas,
+  IDXSchemaName,
   IDXSignedDefinitions,
   IDXSignedSchemas,
   PublishDoc,
   SchemaDoc,
 } from './types'
-import { promiseMap } from './utils'
+import { promiseMap, docIDToString } from './utils'
 import { validateSchema } from './validate'
 
 export async function createTile<T = unknown>(
@@ -28,8 +30,8 @@ export async function createTile<T = unknown>(
     throw new Error('Ceramic instance is not authenticated')
   }
 
-  if (metadata.owners == null || metadata.owners.length === 0) {
-    metadata.owners = [ceramic.did.id]
+  if (metadata.controllers == null || metadata.controllers.length === 0) {
+    metadata.controllers = [ceramic.did.id]
   }
 
   const doc = await ceramic.createDocument('tile', { content, metadata: metadata as DocMetadata })
@@ -42,14 +44,17 @@ export async function publishDoc<T = unknown>(
   doc: PublishDoc<T>
 ): Promise<DocID> {
   if (doc.id == null) {
-    return await createTile(ceramic, doc.content, { owners: doc.owners, schema: doc.schema })
+    return await createTile(ceramic, doc.content, {
+      controllers: doc.controllers,
+      schema: doc.schema ? docIDToString(doc.schema) : undefined,
+    })
   }
 
   const loaded = await ceramic.loadDocument(doc.id)
   if (!isEqual(loaded.content, doc.content)) {
     await loaded.change({ content: doc.content })
   }
-  return doc.id
+  return loaded.id
 }
 
 export async function createDefinition(
@@ -84,7 +89,7 @@ export async function publishRecords(
   return doc.id
 }
 
-export async function publishSchema(ceramic: CeramicApi, doc: SchemaDoc): Promise<string> {
+export async function publishSchema(ceramic: CeramicApi, doc: SchemaDoc): Promise<DocID> {
   if (!validateSchema(doc.content)) {
     throw new Error(`Schema ${doc.name} is invalid or not secure`)
   }
@@ -102,7 +107,11 @@ export async function publishIDXSignedDefinitions(
   ceramic: CeramicApi,
   definitions: IDXSignedDefinitions = signedDefinitions
 ): Promise<IDXPublishedDefinitions> {
-  return await publishSignedMap(ceramic, definitions)
+  const signedMap = await publishSignedMap(ceramic, definitions)
+  return Object.entries(signedMap).reduce((acc, [key, id]) => {
+    acc[key as IDXDefinitionName] = id.toString()
+    return acc
+  }, {} as IDXPublishedDefinitions)
 }
 
 export async function publishIDXSignedDID(
@@ -116,7 +125,11 @@ export async function publishIDXSignedSchemas(
   ceramic: CeramicApi,
   schemas: IDXSignedSchemas = signedSchemas
 ): Promise<IDXPublishedSchemas> {
-  return await publishSignedMap(ceramic, schemas)
+  const signedMap = await publishSignedMap(ceramic, schemas)
+  return Object.entries(signedMap).reduce((acc, [key, id]) => {
+    acc[key as IDXSchemaName] = id.toUrl('base36')
+    return acc
+  }, {} as IDXPublishedSchemas)
 }
 
 export async function publishIDXConfig(ceramic: CeramicApi): Promise<IDXPublishedConfig> {

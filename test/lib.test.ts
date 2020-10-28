@@ -6,6 +6,7 @@
 import { CeramicApi } from '@ceramicnetwork/ceramic-common'
 import { DID } from 'dids'
 import Wallet from 'identity-wallet'
+import { fromString } from 'uint8arrays'
 
 import {
   createIDXSignedDefinitions,
@@ -17,15 +18,13 @@ import {
   signIDXSchemas,
 } from '..'
 
-const SEED = '0x08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0'
-
 declare global {
   const ceramic: CeramicApi
-  const wallet: Wallet
 }
 
 describe('lib', () => {
-  const DocID = expect.stringMatching(/^ceramic:\/\/[0-9a-z]+$/) as jest.Expect
+  const DocID = expect.stringMatching(/^[0-9a-z]+$/) as jest.Expect
+  const DocURL = expect.stringMatching(/^ceramic:\/\/[0-9a-z]+$/) as jest.Expect
   const DagJWSResult = expect.objectContaining({
     jws: expect.any(Object),
     linkedBlock: expect.any(Uint8Array),
@@ -45,10 +44,11 @@ describe('lib', () => {
   test('signing and publishing flow', async () => {
     const wallet = await Wallet.create({
       ceramic,
-      seed: SEED,
+      seed: fromString('08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0'),
       getPermission() {
         return Promise.resolve([])
       },
+      disableIDX: true,
     })
     const did = new DID({ provider: wallet.getDidProvider() })
     await did.authenticate()
@@ -57,10 +57,11 @@ describe('lib', () => {
     // to ensure the schemas and definitions author is different from the publishing DID
     await Wallet.create({
       ceramic,
-      seed: '0x9a4a9470cf014277f58a8f5761611662b38b5306ddf5403b3417d2e9d28aaf1e',
+      seed: fromString('9a4a9470cf014277f58a8f5761611662b38b5306ddf5403b3417d2e9d28aaf1e'),
       getPermission() {
         return Promise.resolve([])
       },
+      disableIDX: true,
     })
     expect(did.id).not.toBe(ceramic.did.id)
 
@@ -77,11 +78,11 @@ describe('lib', () => {
     // Publish the signed schemas to Ceramic, no need to be the authoring DID
     const schemas = await publishIDXSignedSchemas(ceramic, signedSchemas)
     expect(schemas).toEqual({
-      BasicProfile: DocID,
-      CryptoAccountLinks: DocID,
-      Definition: DocID,
-      IdentityIndex: DocID,
-      ThreeIdKeychain: DocID,
+      BasicProfile: DocURL,
+      CryptoAccountLinks: DocURL,
+      Definition: DocURL,
+      IdentityIndex: DocURL,
+      ThreeIdKeychain: DocURL,
     })
 
     // Create and sign the definitions, we need the published schemas DocIDs for this
