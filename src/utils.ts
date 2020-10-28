@@ -1,8 +1,4 @@
-import DocID from '@ceramicnetwork/docid'
-
-export function docIDFromString(id: DocID | string): DocID {
-  return typeof id === 'string' ? DocID.fromString(id) : id
-}
+import type DocID from '@ceramicnetwork/docid'
 
 export function docIDToString(id: DocID | string): string {
   return typeof id === 'string' ? id : id.toString()
