@@ -16,7 +16,7 @@ import {
   publishedDefinitions,
   publishedSchemas,
   signIDXSchemas,
-} from '../src'
+} from '..'
 
 declare global {
   const ceramic: CeramicApi
