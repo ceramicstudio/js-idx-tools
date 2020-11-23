@@ -27,7 +27,7 @@ export interface EncodedDagJWSResult {
 type SignedRecord<K extends string> = Record<K, Array<DagJWSResult>>
 type PublishedRecord<K extends string> = Record<K, string>
 
-export type IDXDefinitionName = 'basicProfile' | 'cryptoAccountLinks' | 'threeIdKeychain'
+export type IDXDefinitionName = 'basicProfile' | 'cryptoAccounts' | 'threeIdKeychain'
 export type IDXSignedDefinitions = SignedRecord<IDXDefinitionName>
 export type IDXPublishedDefinitions = PublishedRecord<IDXDefinitionName>
 

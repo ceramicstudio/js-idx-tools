@@ -14,7 +14,7 @@
       "linkedBlock": "o2RkYXRhomRuYW1lbUJhc2ljIFByb2ZpbGVmc2NoZW1heEljZXJhbWljOi8va2p6bDZjd2UxancxNGJlN2JkNnc4Z284dzBwZ3Zlb2pqcmQ3YnZxcnVnZmRzejZnaHpmZW80MmVxbXVyZDBuZmhlYWRlcqJmc2NoZW1heEljZXJhbWljOi8va2p6bDZjd2UxancxNDZrY2FnaGFtbnIxdHZjZzNidXNraGQ3OTI1Z3NiaXprc2V5c2dpYnk5MHk3bmJqZGFua2NvbnRyb2xsZXJzgXhFZGlkOjM6a2p6bDZjd2UxancxNDY5cWNweW81dG1xcmNvMGR6ajZhbWlhaW1iYzE2N3UwbTVsdDI0N2NwdmpybnVldXliZ2RvY3R5cGVkdGlsZQ=="
     }
   ],
-  "cryptoAccountLinks": [
+  "cryptoAccounts": [
     {
       "jws": {
         "payload": "AXESIHQzF0m5HLVRJezF9eXNAe73JDTsuXO7GVbjK-wC_n2S",

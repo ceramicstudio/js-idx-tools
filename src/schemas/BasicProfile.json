@@ -5,58 +5,47 @@
   "properties": {
     "name": {
       "type": "string",
-      "title": "name",
       "maxLength": 150
     },
     "image": {
       "type": "string",
-      "title": "image",
       "maxLength": 150
     },
     "description": {
       "type": "string",
-      "title": "description",
       "maxLength": 420
     },
     "emoji": {
       "type": "string",
-      "title": "emoji",
       "maxLength": 2
     },
     "background": {
       "type": "string",
-      "title": "background",
       "maxLength": 150
     },
     "birthDate": {
       "type": "string",
       "format": "date",
-      "title": "birthDate",
       "maxLength": 10
     },
     "url": {
       "type": "string",
-      "title": "url",
       "maxLength": 240
     },
     "gender": {
       "type": "string",
-      "title": "gender",
       "maxLength": 42
     },
     "homeLocation": {
       "type": "string",
-      "title": "homeLocation",
       "maxLength": 140
     },
     "residenceCountry": {
-      "title": "residenceCountry",
       "type": "string",
       "pattern": "^[A-Z]{2}$",
       "maxLength": 2
     },
     "nationalities": {
-      "title": "nationality",
       "oneOf": [
         {
           "type": "string",
@@ -79,8 +68,7 @@
       "items": {
         "type": "string",
         "maxLength": 140
-      },
-      "title": "affiliations"
+      }
     }
   }
 }

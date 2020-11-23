@@ -18,7 +18,7 @@ describe('definitions', () => {
 
   const schemas = {
     BasicProfile: 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp012',
-    CryptoAccountLinks: 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp123',
+    CryptoAccounts: 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp123',
     Definition: 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp234',
     IdentityIndex: 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp345',
     ThreeIdKeychain: 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp456',
@@ -29,14 +29,17 @@ describe('definitions', () => {
       basicProfile: {
         name: 'Basic Profile',
         schema: 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp012',
+        description: 'Basic profile information for a DID',
       },
-      cryptoAccountLinks: {
-        name: 'Crypto Account Links',
+      cryptoAccounts: {
+        name: 'Crypto Accounts',
         schema: 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp123',
+        description: 'Crypto accounts linked to your DID',
       },
       threeIdKeychain: {
         name: '3ID Keychain',
         schema: 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp456',
+        description: 'Key data for 3ID',
       },
     })
   })
@@ -54,7 +57,7 @@ describe('definitions', () => {
     await did.authenticate()
     await expect(createIDXSignedDefinitions(did, schemas)).resolves.toEqual({
       basicProfile: Records,
-      cryptoAccountLinks: Records,
+      cryptoAccounts: Records,
       threeIdKeychain: Records,
     })
   })
