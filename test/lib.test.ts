@@ -16,7 +16,7 @@ import {
   publishedDefinitions,
   publishedSchemas,
   signIDXSchemas,
-} from '..'
+} from '../src'
 
 declare global {
   const ceramic: CeramicApi
@@ -69,7 +69,7 @@ describe('lib', () => {
     const signedSchemas = await signIDXSchemas(did)
     expect(signedSchemas).toEqual({
       BasicProfile: Records,
-      CryptoAccountLinks: Records,
+      CryptoAccounts: Records,
       Definition: Records,
       IdentityIndex: Records,
       ThreeIdKeychain: Records,
@@ -79,7 +79,7 @@ describe('lib', () => {
     const schemas = await publishIDXSignedSchemas(ceramic, signedSchemas)
     expect(schemas).toEqual({
       BasicProfile: DocURL,
-      CryptoAccountLinks: DocURL,
+      CryptoAccounts: DocURL,
       Definition: DocURL,
       IdentityIndex: DocURL,
       ThreeIdKeychain: DocURL,
@@ -89,7 +89,7 @@ describe('lib', () => {
     const signedDefinitions = await createIDXSignedDefinitions(did, publishedSchemas)
     expect(signedDefinitions).toEqual({
       basicProfile: Records,
-      cryptoAccountLinks: Records,
+      cryptoAccounts: Records,
       threeIdKeychain: Records,
     })
 
@@ -97,7 +97,7 @@ describe('lib', () => {
     const definitions = await publishIDXSignedDefinitions(ceramic, signedDefinitions)
     expect(definitions).toEqual({
       basicProfile: DocID,
-      cryptoAccountLinks: DocID,
+      cryptoAccounts: DocID,
       threeIdKeychain: DocID,
     })
   })

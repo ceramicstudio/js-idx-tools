@@ -5,7 +5,6 @@
   "properties": {
     "name": {
       "type": "string",
-      "title": "name",
       "maxLength": 150
     },
     "schema": {
@@ -13,12 +12,14 @@
     },
     "description": {
       "type": "string",
-      "title": "description",
       "maxLength": 420
     },
     "url": {
       "type": "string",
-      "title": "url",
+      "maxLength": 240
+    },
+    "family": {
+      "type": "string",
       "maxLength": 240
     },
     "config": {
@@ -31,5 +32,10 @@
       "pattern": "^ceramic://.+(\\?version=.+)?",
       "maxLength": 150
     }
-  }
+  },
+  "required": [
+    "name",
+    "description",
+    "schema"
+  ]
 }

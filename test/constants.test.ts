@@ -9,7 +9,7 @@ describe('constants', () => {
   test('publishedDefinitions', () => {
     expect(publishedDefinitions).toEqual({
       basicProfile: DocID,
-      cryptoAccountLinks: DocID,
+      cryptoAccounts: DocID,
       threeIdKeychain: DocID,
     })
   })
@@ -17,7 +17,7 @@ describe('constants', () => {
   test('publishedSchemas', () => {
     expect(publishedSchemas).toEqual({
       BasicProfile: DocURL,
-      CryptoAccountLinks: DocURL,
+      CryptoAccounts: DocURL,
       Definition: DocURL,
       IdentityIndex: DocURL,
       ThreeIdKeychain: DocURL,

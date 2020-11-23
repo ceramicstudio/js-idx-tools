@@ -14,14 +14,17 @@ export function createIDXDefinitions(
   return {
     basicProfile: {
       name: 'Basic Profile',
+      description: 'Basic profile information for a DID',
       schema: schemas.BasicProfile,
     },
-    cryptoAccountLinks: {
-      name: 'Crypto Account Links',
-      schema: schemas.CryptoAccountLinks,
+    cryptoAccounts: {
+      name: 'Crypto Accounts',
+      description: 'Crypto accounts linked to your DID',
+      schema: schemas.CryptoAccounts,
     },
     threeIdKeychain: {
       name: '3ID Keychain',
+      description: 'Key data for 3ID',
       schema: schemas.ThreeIdKeychain,
     },
   }
