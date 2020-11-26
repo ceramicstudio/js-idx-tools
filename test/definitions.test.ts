@@ -3,8 +3,9 @@
  */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
+import KeyResolver from '@ceramicnetwork/key-did-resolver'
 import { DID } from 'dids'
-import Wallet from 'identity-wallet'
+import { Ed25519Provider } from 'key-did-provider-ed25519'
 import { fromString } from 'uint8arrays'
 
 import { createIDXDefinitions, createIDXSignedDefinitions } from '../src'
@@ -45,15 +46,14 @@ describe('definitions', () => {
   })
 
   it('createIDXSignedDefinitions', async () => {
-    const wallet = await Wallet.create({
-      ceramic,
-      seed: fromString('08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0'),
-      getPermission() {
-        return Promise.resolve([])
-      },
-      disableIDX: true,
+    const seed = fromString(
+      '08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0',
+      'base16'
+    )
+    const did = new DID({
+      provider: new Ed25519Provider(seed),
+      resolver: KeyResolver.getResolver(),
     })
-    const did = new DID({ provider: wallet.getDidProvider() })
     await did.authenticate()
     await expect(createIDXSignedDefinitions(did, schemas)).resolves.toEqual({
       basicProfile: Records,

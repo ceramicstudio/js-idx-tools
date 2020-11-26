@@ -1,15 +1,15 @@
 import type { IDXPublishedDefinitions, IDXPublishedSchemas } from './types'
 
 export const publishedDefinitions: IDXPublishedDefinitions = {
-  basicProfile: 'kjzl6cwe1jw148j1527vfzj5y064mc46oxboavop92igwxf2yvad502ud6h2oko',
-  cryptoAccounts: 'kjzl6cwe1jw148mi8ug0glxpaq5nd591j1q23fau2wdellbm1unezw0vdnh6k3w',
-  threeIdKeychain: 'kjzl6cwe1jw14blngzz896wlixmclprl7nxkpj9s1fgiph2quok8894q7f5mkk0',
+  basicProfile: 'kjzl6cwe1jw149gzi9cwo5ew3w7zilgnkkpbc3ilz2vpszx0dspwehiofogpis1',
+  cryptoAccounts: 'kjzl6cwe1jw148845sqymlnkea5dll9p7om78lcndtjhvj5y9u3qokkrhan3imr',
+  threeIdKeychain: 'kjzl6cwe1jw146of0djwju60si5cmbadn98ztk3mootwwekhvmusyvwlmom0nrr',
 }
 
 export const publishedSchemas: IDXPublishedSchemas = {
-  BasicProfile: 'ceramic://kjzl6cwe1jw14be7bd6w8go8w0pgveojjrd7bvqrugfdsz6ghzfeo42eqmurd0n',
-  CryptoAccounts: 'ceramic://kjzl6cwe1jw148d8sqzd4cbsq1d8unxg5nap47p72rx4fj3h4hxdq9f1so0bwsm',
-  Definition: 'ceramic://kjzl6cwe1jw146kcaghamnr1tvcg3buskhd7925gsbizkseysgiby90y7nbjdan',
-  IdentityIndex: 'ceramic://kjzl6cwe1jw149e00sw952mxzlsmue6u7vvfd0jkwwfr4meh2qkpu4n2q5rd8ex',
-  ThreeIdKeychain: 'ceramic://kjzl6cwe1jw147jz0tc34684e5d8v7p9pmkiivszes02vu9qv7zsb8972xdlbfc',
+  BasicProfile: 'ceramic://k3y52l7qbv1frxvsxw16w4zxgbuji4yk74xlfub711wrfjvaugf2x0sg278ameghs',
+  CryptoAccounts: 'ceramic://k3y52l7qbv1fry4ai1jnmjqo6260zo3z0u5iyxvx2xpaukon6o0x39rkkbjl0dqf4',
+  Definition: 'ceramic://k3y52l7qbv1fry6zfns4ik8xpl4gfuqinac50b17j3z0f32vgie8v9rt235cv72f4',
+  IdentityIndex: 'ceramic://k3y52l7qbv1frxz6n89jr8m3dqz7i2179m3wtg21v63gnxu1oo3xr8yle1xabw9a8',
+  ThreeIdKeychain: 'ceramic://k3y52l7qbv1frymaxbddcyi0usku9px485z87s2i9v2h6cuofmhmb9pflizzfttds',
 }

@@ -7,6 +7,10 @@ import { createTile, publishDoc, publishRecords } from '../src'
 describe('publishing', () => {
   const testID = 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp60s'
   const testDocID = DocID.fromString(testID)
+  const testDoc = {
+    id: testDocID,
+    versionId: DocID.fromString('kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp60t'),
+  }
 
   describe('createTile', () => {
     test('throw an error if the Ceramic instance is not authenticated', async () => {
@@ -43,7 +47,7 @@ describe('publishing', () => {
 
   describe('publishDoc', () => {
     test('creates the document if the DocID is not provided', async () => {
-      const createDocument = jest.fn(() => Promise.resolve({ id: testDocID }))
+      const createDocument = jest.fn(() => Promise.resolve(testDoc))
       const pinAdd = jest.fn(() => Promise.resolve())
       const ceramic = { did: { id: 'did:test:123' }, createDocument, pin: { add: pinAdd } } as any
 
@@ -53,7 +57,7 @@ describe('publishing', () => {
           controllers: ['did:test:456'],
           schema: testID,
         })
-      ).resolves.toBe(testDocID)
+      ).resolves.toBe(testDoc)
       expect(createDocument).toBeCalledWith('tile', {
         content: { hello: 'test' },
         metadata: { controllers: ['did:test:456'], schema: testID },
@@ -63,13 +67,12 @@ describe('publishing', () => {
 
     test('updates the document if contents changed', async () => {
       const change = jest.fn()
-      const loadDocument = jest.fn(() => {
-        return Promise.resolve({ content: { hello: 'world' }, change, id: testDocID })
-      })
+      const doc = { content: { hello: 'world' }, change, id: testDocID }
+      const loadDocument = jest.fn(() => Promise.resolve(doc))
       const ceramic = { loadDocument } as any
 
       await expect(publishDoc(ceramic, { id: testID, content: { hello: 'test' } })).resolves.toBe(
-        testDocID
+        doc
       )
       expect(loadDocument).toBeCalledWith(testID)
       expect(change).toBeCalledWith({ content: { hello: 'test' } })
@@ -77,13 +80,12 @@ describe('publishing', () => {
 
     test('does not update the document if contents have not changed', async () => {
       const change = jest.fn()
-      const loadDocument = jest.fn(() => {
-        return Promise.resolve({ content: { hello: 'test' }, change, id: testDocID })
-      })
+      const doc = { content: { hello: 'test' }, change, id: testDocID }
+      const loadDocument = jest.fn(() => Promise.resolve(doc))
       const ceramic = { loadDocument } as any
 
       await expect(publishDoc(ceramic, { id: testID, content: { hello: 'test' } })).resolves.toBe(
-        testDocID
+        doc
       )
       expect(loadDocument).toBeCalledWith(testID)
       expect(change).not.toBeCalled()
@@ -91,8 +93,8 @@ describe('publishing', () => {
   })
 
   test('publishRecords', async () => {
-    const createDocument = jest.fn(() => Promise.resolve({ id: testDocID }))
-    const applyRecord = jest.fn(() => Promise.resolve({ id: testDocID }))
+    const createDocument = jest.fn(() => Promise.resolve(testDoc))
+    const applyRecord = jest.fn(() => Promise.resolve(testDoc))
     const pinAdd = jest.fn(() => Promise.resolve())
     const ceramic = {
       createDocumentFromGenesis: createDocument,
@@ -101,10 +103,10 @@ describe('publishing', () => {
     } as any
 
     const records = [{ jws: {}, __genesis: true }, { jws: {} }, { jws: {} }]
-    await expect(publishRecords(ceramic, records as any)).resolves.toBe(testDocID)
-    expect(createDocument).toBeCalledWith({ jws: {}, __genesis: true })
+    await expect(publishRecords(ceramic, records as any)).resolves.toBe(testDoc)
+    expect(createDocument).toBeCalledWith('tile', { jws: {}, __genesis: true })
     expect(pinAdd).toBeCalledWith(testDocID)
     expect(applyRecord).toBeCalledTimes(2)
-    expect(applyRecord).toBeCalledWith(testDocID, { jws: {} }, { applyOnly: true })
+    expect(applyRecord).toBeCalledWith(testDocID, { jws: {} }, { anchor: false, publish: false })
   })
 })

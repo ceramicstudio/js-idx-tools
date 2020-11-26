@@ -1,10 +1,10 @@
 const { inspect } = require('util')
-const Ceramic = require('@ceramicnetwork/ceramic-http-client').default
+const Ceramic = require('@ceramicnetwork/http-client').default
 const { outputJSON } = require('fs-extra')
 
 const { encodeSignedMap } = require('..')
 
-const ceramic = new Ceramic(process.env.CERAMIC_URL)
+const ceramic = new Ceramic(process.env.CERAMIC_URL, { didResolver: {} })
 
 function logJSON(data) {
   console.log(inspect(data, { colors: true, depth: null }))
