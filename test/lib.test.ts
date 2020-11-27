@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import KeyResolver from '@ceramicnetwork/key-did-resolver'
-import { CeramicApi } from '@ceramicnetwork/common'
 import { DID } from 'dids'
 import { Ed25519Provider } from 'key-did-provider-ed25519'
 import { fromString } from 'uint8arrays'
@@ -18,10 +17,6 @@ import {
   publishedSchemas,
   signIDXSchemas,
 } from '..'
-
-declare global {
-  const ceramic: CeramicApi
-}
 
 describe('lib', () => {
   const DocID = expect.stringMatching(/^[0-9a-z]+$/) as jest.Expect

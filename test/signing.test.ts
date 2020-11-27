@@ -1,6 +1,3 @@
-/**
- * @jest-environment ceramic
- */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import KeyResolver from '@ceramicnetwork/key-did-resolver'

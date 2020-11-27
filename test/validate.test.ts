@@ -1,7 +1,7 @@
-import { isSchemaSecure, validateSchema } from '../src'
+import { isSecureSchema, validateSchemaSecure } from '../src'
 
 describe('validate', () => {
-  describe('isSchemaSecure', () => {
+  describe('validateSchemaSecure', () => {
     it('returns false for an insecure schema', () => {
       const schema = {
         type: 'object',
@@ -12,7 +12,7 @@ describe('validate', () => {
           },
         },
       }
-      expect(isSchemaSecure(schema)).toBe(false)
+      expect(validateSchemaSecure(schema)).toBe(false)
     })
 
     it('returns true for an secure schema', () => {
@@ -26,13 +26,13 @@ describe('validate', () => {
           },
         },
       }
-      expect(isSchemaSecure(schema)).toBe(true)
+      expect(validateSchemaSecure(schema)).toBe(true)
     })
   })
 
-  describe('validateSchema', () => {
+  describe('isSecureSchema', () => {
     it('throws an error for an invalid schema', () => {
-      expect(() => validateSchema({ type: 'foo' })).toThrow()
+      expect(() => isSecureSchema({ type: 'foo' })).toThrow()
     })
 
     it('returns false for an insecure schema', () => {
@@ -45,7 +45,7 @@ describe('validate', () => {
           },
         },
       }
-      expect(validateSchema(schema)).toBe(false)
+      expect(isSecureSchema(schema)).toBe(false)
     })
 
     it('returns true for an secure schema', () => {
@@ -59,7 +59,7 @@ describe('validate', () => {
           },
         },
       }
-      expect(validateSchema(schema)).toBe(true)
+      expect(isSecureSchema(schema)).toBe(true)
     })
   })
 })

@@ -1,5 +1,6 @@
 export * from './constants'
 export * from './definitions'
+export * from './docset'
 export * from './encoding'
 export * from './publishing'
 export * as schemas from './schemas'

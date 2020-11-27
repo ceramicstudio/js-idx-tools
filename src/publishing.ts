@@ -18,7 +18,7 @@ import type {
   SchemaDoc,
 } from './types'
 import { promiseMap, docIDToString } from './utils'
-import { validateSchema } from './validate'
+import { isValidDefinition, isSecureSchema } from './validate'
 
 export async function createTile<T = unknown>(
   ceramic: CeramicApi,
@@ -60,6 +60,9 @@ export async function createDefinition(
   ceramic: CeramicApi,
   definition: Definition
 ): Promise<Doctype> {
+  if (!isValidDefinition(definition)) {
+    throw new Error('Invalid definition')
+  }
   return await createTile(ceramic, definition, { schema: publishedSchemas.Definition })
 }
 
@@ -93,8 +96,8 @@ export async function publishRecords(
 }
 
 export async function publishSchema(ceramic: CeramicApi, doc: SchemaDoc): Promise<Doctype> {
-  if (!validateSchema(doc.content)) {
-    throw new Error(`Schema ${doc.name} is invalid or not secure`)
+  if (!isSecureSchema(doc.content)) {
+    throw new Error(`Schema ${doc.name} is not secure`)
   }
   return await publishDoc(ceramic, doc)
 }
