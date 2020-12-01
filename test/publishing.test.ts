@@ -103,10 +103,11 @@ describe('publishing', () => {
     } as any
 
     const records = [{ jws: {}, __genesis: true }, { jws: {} }, { jws: {} }]
+    const opts = { anchor: false, publish: false }
     await expect(publishRecords(ceramic, records as any)).resolves.toBe(testDoc)
-    expect(createDocument).toBeCalledWith('tile', { jws: {}, __genesis: true })
+    expect(createDocument).toBeCalledWith('tile', { jws: {}, __genesis: true }, opts)
     expect(pinAdd).toBeCalledWith(testDocID)
     expect(applyRecord).toBeCalledTimes(2)
-    expect(applyRecord).toBeCalledWith(testDocID, { jws: {} }, { anchor: false, publish: false })
+    expect(applyRecord).toBeCalledWith(testDocID, { jws: {} }, opts)
   })
 })

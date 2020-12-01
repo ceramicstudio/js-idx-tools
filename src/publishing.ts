@@ -1,4 +1,4 @@
-import type { CeramicApi, DocMetadata, Doctype } from '@ceramicnetwork/common'
+import type { CeramicApi, DocMetadata, DocOpts, Doctype } from '@ceramicnetwork/common'
 import { schemas as publishedSchemas } from '@ceramicstudio/idx-constants'
 import type {
   IDXDefinitionName,
@@ -21,6 +21,8 @@ import type {
 } from './types'
 import { promiseMap, docIDToString } from './utils'
 import { isValidDefinition, isSecureSchema } from './validate'
+
+const PUBLISH_OPTS: DocOpts = { anchor: false, publish: false }
 
 export async function createTile<T = unknown>(
   ceramic: CeramicApi,
@@ -85,14 +87,11 @@ export async function publishRecords(
   ceramic: CeramicApi,
   [genesis, ...updates]: Array<DagJWSResult>
 ): Promise<Doctype> {
-  const doc = await ceramic.createDocumentFromGenesis('tile', genesis)
+  const doc = await ceramic.createDocumentFromGenesis('tile', genesis, PUBLISH_OPTS)
   await ceramic.pin.add(doc.id)
   for (const record of updates) {
     // Type definition for record in Ceramic doesn't match DagJWSResult
-    await ceramic.applyRecord(doc.id, record as Record<string, any>, {
-      anchor: false,
-      publish: false,
-    })
+    await ceramic.applyRecord(doc.id, record as Record<string, any>, PUBLISH_OPTS)
   }
   return doc
 }
