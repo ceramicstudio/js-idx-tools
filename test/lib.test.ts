@@ -4,6 +4,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import KeyResolver from '@ceramicnetwork/key-did-resolver'
+import {
+  definitions as publishedDefinitions,
+  schemas as publishedSchemas,
+} from '@ceramicstudio/idx-constants'
 import { DID } from 'dids'
 import { Ed25519Provider } from 'key-did-provider-ed25519'
 import { fromString } from 'uint8arrays'
@@ -13,8 +17,6 @@ import {
   publishIDXConfig,
   publishIDXSignedDefinitions,
   publishIDXSignedSchemas,
-  publishedDefinitions,
-  publishedSchemas,
   signIDXSchemas,
 } from '..'
 
@@ -28,7 +30,7 @@ describe('lib', () => {
   const Records = expect.arrayContaining([DagJWSResult])
 
   test('publish config', async () => {
-    jest.setTimeout(60000)
+    jest.setTimeout(20000)
 
     const config = await publishIDXConfig(ceramic)
     expect(config).toEqual({
@@ -38,6 +40,8 @@ describe('lib', () => {
   })
 
   test('signing and publishing flow', async () => {
+    jest.setTimeout(20000)
+
     const seed = fromString(
       '08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0',
       'base16'

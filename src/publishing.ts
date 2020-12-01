@@ -1,17 +1,19 @@
 import type { CeramicApi, DocMetadata, Doctype } from '@ceramicnetwork/common'
+import { schemas as publishedSchemas } from '@ceramicstudio/idx-constants'
+import type {
+  IDXDefinitionName,
+  IDXPublishedDefinitions,
+  IDXPublishedSchemas,
+  IDXSchemaName,
+} from '@ceramicstudio/idx-constants'
 import type { DagJWSResult } from 'dids'
 import isEqual from 'fast-deep-equal'
 
-import { publishedSchemas } from './constants'
 import { signedDefinitions, signedSchemas } from './signed'
 import type {
   Definition,
   DefinitionDoc,
-  IDXDefinitionName,
   IDXPublishedConfig,
-  IDXPublishedDefinitions,
-  IDXPublishedSchemas,
-  IDXSchemaName,
   IDXSignedDefinitions,
   IDXSignedSchemas,
   PublishDoc,

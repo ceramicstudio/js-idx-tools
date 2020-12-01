@@ -103,9 +103,6 @@ export class DocSet {
       throw new Error('Schema must have a title property or an alias must be provided')
     }
 
-    // TODO: lookup CeramicSchemaRef in the schema definitions
-    // If set, add schemas as dependencies
-
     const created = await this.createSchema(name, schema)
     return created.id
   }

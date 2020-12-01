@@ -1,6 +1,6 @@
 {
   "name": "@ceramicstudio/idx-tools",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "author": "Ceramic Studio",
   "homepage": "https://idx.xyz",
   "license": "(Apache-2.0 OR MIT)",
@@ -17,7 +17,7 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
-    "test": "tsdx test --runInBand",
+    "test": "tsdx test",
     "lint": "tsdx lint src test",
     "prepare": "tsdx build",
     "size": "size-limit",
@@ -30,10 +30,11 @@
     "uint8arrays": "^1.1.0"
   },
   "devDependencies": {
-    "@ceramicnetwork/common": "^0.13.1",
+    "@ceramicnetwork/common": "^0.14.0",
     "@ceramicnetwork/docid": "^0.3.0",
-    "@ceramicnetwork/http-client": "^0.8.1",
+    "@ceramicnetwork/http-client": "^0.8.4",
     "@ceramicnetwork/key-did-resolver": "^0.2.0",
+    "@ceramicstudio/idx-constants": "^0.4.0",
     "@size-limit/preset-small-lib": "^4.9.0",
     "@types/jest": "^26.0.15",
     "dids": "^1.1.0",
@@ -41,9 +42,9 @@
     "eslint-config-3box": "^0.2.0",
     "fs-extra": "^9.0.1",
     "husky": "^4.3.0",
-    "jest-environment-ceramic": "^0.6.0",
+    "jest-environment-ceramic": "^0.7.0",
     "key-did-provider-ed25519": "^1.0.0",
-    "prettier": "^2.2.0",
+    "prettier": "^2.2.1",
     "size-limit": "^4.9.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.0.3",
