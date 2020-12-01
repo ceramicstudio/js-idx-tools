@@ -88,7 +88,7 @@ export async function publishRecords(
   const doc = await ceramic.createDocumentFromGenesis('tile', genesis)
   await ceramic.pin.add(doc.id)
   for (const record of updates) {
-    // TODO: better type for record + what is the new option to set?
+    // Type definition for record in Ceramic doesn't match DagJWSResult
     await ceramic.applyRecord(doc.id, record as Record<string, any>, {
       anchor: false,
       publish: false,

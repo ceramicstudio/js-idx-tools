@@ -4,7 +4,7 @@ const { outputJSON } = require('fs-extra')
 
 const { encodeSignedMap } = require('..')
 
-const ceramic = new Ceramic(process.env.CERAMIC_URL, { didResolver: {} })
+const ceramic = new Ceramic(process.env.CERAMIC_URL)
 
 function logJSON(data) {
   console.log(inspect(data, { colors: true, depth: null }))
