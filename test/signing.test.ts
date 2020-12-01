@@ -1,10 +1,8 @@
-/**
- * @jest-environment ceramic
- */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
+import KeyResolver from '@ceramicnetwork/key-did-resolver'
 import { DID } from 'dids'
-import Wallet from 'identity-wallet'
+import { Ed25519Provider } from 'key-did-provider-ed25519'
 import { fromString } from 'uint8arrays'
 
 import { schemas, signTile, signIDXDefinitions, signIDXSchemas } from '../src'
@@ -16,17 +14,13 @@ describe('signing', () => {
   })
   const Records = expect.arrayContaining([DagJWSResult])
 
+  const seed = fromString(
+    '08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0',
+    'base16'
+  )
   let did: DID
   beforeAll(async () => {
-    const wallet = await Wallet.create({
-      ceramic,
-      seed: fromString('08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0'),
-      getPermission() {
-        return Promise.resolve([])
-      },
-      disableIDX: true,
-    })
-    did = new DID({ provider: wallet.getDidProvider() })
+    did = new DID({ provider: new Ed25519Provider(seed), resolver: KeyResolver.getResolver() })
     await did.authenticate()
   })
 

@@ -1,12 +1,8 @@
+import type { IDXDefinitionName, IDXPublishedSchemas } from '@ceramicstudio/idx-constants'
 import type { DID } from 'dids'
 
 import { signIDXDefinitions } from './signing'
-import type {
-  Definition,
-  IDXDefinitionName,
-  IDXPublishedSchemas,
-  IDXSignedDefinitions,
-} from './types'
+import type { Definition, IDXSignedDefinitions } from './types'
 
 export function createIDXDefinitions(
   schemas: IDXPublishedSchemas

@@ -1,5 +1,5 @@
 const { inspect } = require('util')
-const Ceramic = require('@ceramicnetwork/ceramic-http-client').default
+const Ceramic = require('@ceramicnetwork/http-client').default
 const { outputJSON } = require('fs-extra')
 
 const { encodeSignedMap } = require('..')

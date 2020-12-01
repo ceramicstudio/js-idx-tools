@@ -13,14 +13,12 @@ export async function signTile<T = unknown>(
   if (!did.authenticated) {
     throw new Error('DID must be authenticated')
   }
-  return await did.createDagJWS(
-    {
-      doctype: 'tile',
-      data,
-      header: { controllers: [did.id], schema: schema ? docIDToString(schema) : undefined },
-    },
-    { did: did.id }
-  )
+
+  const header = {
+    controllers: [did.id],
+    schema: schema ? docIDToString(schema) : undefined,
+  }
+  return await did.createDagJWS({ data, doctype: 'tile', header }, { did: did.id })
 }
 
 export async function signIDXDefinitions(

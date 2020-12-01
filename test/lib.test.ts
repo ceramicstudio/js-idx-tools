@@ -3,9 +3,13 @@
  */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { CeramicApi } from '@ceramicnetwork/ceramic-common'
+import KeyResolver from '@ceramicnetwork/key-did-resolver'
+import {
+  definitions as publishedDefinitions,
+  schemas as publishedSchemas,
+} from '@ceramicstudio/idx-constants'
 import { DID } from 'dids'
-import Wallet from 'identity-wallet'
+import { Ed25519Provider } from 'key-did-provider-ed25519'
 import { fromString } from 'uint8arrays'
 
 import {
@@ -13,14 +17,8 @@ import {
   publishIDXConfig,
   publishIDXSignedDefinitions,
   publishIDXSignedSchemas,
-  publishedDefinitions,
-  publishedSchemas,
   signIDXSchemas,
 } from '..'
-
-declare global {
-  const ceramic: CeramicApi
-}
 
 describe('lib', () => {
   const DocID = expect.stringMatching(/^[0-9a-z]+$/) as jest.Expect
@@ -32,7 +30,7 @@ describe('lib', () => {
   const Records = expect.arrayContaining([DagJWSResult])
 
   test('publish config', async () => {
-    jest.setTimeout(60000)
+    jest.setTimeout(20000)
 
     const config = await publishIDXConfig(ceramic)
     expect(config).toEqual({
@@ -42,28 +40,17 @@ describe('lib', () => {
   })
 
   test('signing and publishing flow', async () => {
-    const wallet = await Wallet.create({
-      ceramic,
-      seed: fromString('08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0'),
-      getPermission() {
-        return Promise.resolve([])
-      },
-      disableIDX: true,
-    })
-    const did = new DID({ provider: wallet.getDidProvider() })
-    await did.authenticate()
+    jest.setTimeout(20000)
 
-    // Wallet.create() attaches itself to the Ceramic instance, so we need to create a new instance
-    // to ensure the schemas and definitions author is different from the publishing DID
-    await Wallet.create({
-      ceramic,
-      seed: fromString('9a4a9470cf014277f58a8f5761611662b38b5306ddf5403b3417d2e9d28aaf1e'),
-      getPermission() {
-        return Promise.resolve([])
-      },
-      disableIDX: true,
+    const seed = fromString(
+      '08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0',
+      'base16'
+    )
+    const did = new DID({
+      provider: new Ed25519Provider(seed),
+      resolver: KeyResolver.getResolver(),
     })
-    expect(did.id).not.toBe(ceramic.did.id)
+    await did.authenticate()
 
     // First sign all the schemas using the DID
     const signedSchemas = await signIDXSchemas(did)
