@@ -5,5 +5,6 @@ module.exports = {
   },
   rules: {
     '@typescript-eslint/ban-ts-ignore': 'off',
+    'jest/no-deprecated-functions': 'off',
   },
 }
