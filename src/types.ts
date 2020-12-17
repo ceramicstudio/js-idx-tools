@@ -1,18 +1,14 @@
 import type DocID from '@ceramicnetwork/docid'
 import type {
-  IDXDefinitionName,
-  IDXSchemaName,
-  IDXPublishedDefinitions,
-  IDXPublishedSchemas,
+  Definition,
+  DefinitionName,
+  SchemaName,
+  PublishedDefinitions,
+  PublishedSchemas,
 } from '@ceramicstudio/idx-constants'
 import type { DagJWSResult, JWSSignature } from 'dids'
-export interface Definition<T extends Record<string, any> = Record<string, any>> {
-  name: string
-  schema: string
-  description: string
-  url?: string
-  config?: T
-}
+
+export type { Definition } from '@ceramicstudio/idx-constants'
 
 export type Schema = Record<string, any>
 
@@ -28,12 +24,12 @@ export interface EncodedDagJWSResult {
 }
 
 type SignedRecord<K extends string> = Record<K, Array<DagJWSResult>>
-export type IDXSignedDefinitions = SignedRecord<IDXDefinitionName>
-export type IDXSignedSchemas = SignedRecord<IDXSchemaName>
+export type SignedDefinitions = SignedRecord<DefinitionName>
+export type SignedSchemas = SignedRecord<SchemaName>
 
-export interface IDXPublishedConfig {
-  definitions: IDXPublishedDefinitions
-  schemas: IDXPublishedSchemas
+export interface PublishedConfig {
+  definitions: PublishedDefinitions
+  schemas: PublishedSchemas
 }
 
 export interface PublishDoc<T = unknown> {

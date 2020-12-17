@@ -1,11 +1,14 @@
 import type { CeramicApi, DocMetadata, Doctype } from '@ceramicnetwork/common'
 import type DocID from '@ceramicnetwork/docid'
+import { camelCase, pascalCase } from 'change-case'
 import type { DagJWSResult } from 'dids'
 
 import { decodeSignedMap, encodeSignedMap } from './encoding'
 import { createDefinition, createTile, publishRecords, publishSchema } from './publishing'
 import type { Definition, EncodedDagJWSResult, Schema } from './types'
 import { docIDToString } from './utils'
+
+export const SCHEMA_REF_ID = 'ceramic://schemaReference'
 
 export type CreatedDoc = {
   id: DocID
@@ -26,6 +29,119 @@ export type DocSetData<T> = {
 export type SignedDocSet = DocSetData<Array<DagJWSResult>>
 export type EncodedSignedDocSet = DocSetData<Array<EncodedDagJWSResult>>
 
+// TODO: import these types from IDX GraphQL lib once published
+type FieldCommon = { required?: boolean }
+type FieldType =
+  | { type: 'boolean' }
+  | { type: 'integer' }
+  | { type: 'float' }
+  | { type: 'string' }
+  | { type: 'list'; name: string }
+  | { type: 'object'; name: string }
+  | { type: 'reference'; name: string }
+
+type Field = FieldCommon & FieldType
+
+type ObjectFields = Record<string, Field>
+
+type DocReference = {
+  id: string
+  schema: string
+}
+
+type GraphQLDocSetRecords = {
+  index: Record<string, DocReference>
+  lists: Record<string, string>
+  nodes: Record<string, string>
+  objects: Record<string, ObjectFields>
+  references: Record<string, Array<string>>
+  roots: Record<string, DocReference>
+}
+
+type AddSchemaOptions = {
+  name?: string
+  prefix: string
+}
+
+function addSchema(
+  records: GraphQLDocSetRecords,
+  schema: Schema,
+  options: AddSchemaOptions
+): string {
+  const providedTitle = options.name ?? (schema.title as string)
+  if (providedTitle == null) {
+    throw new Error('Schema must have a title')
+  }
+
+  const title = pascalCase(providedTitle)
+  const name = title.startsWith(options.prefix) ? title : options.prefix + title
+
+  if (schema.type === 'array' && schema.items != null) {
+    records.lists[name] = addSchema(records, schema.items, { prefix: name })
+  } else if (schema.type === 'object' && schema.properties != null) {
+    if (schema.$id === SCHEMA_REF_ID) {
+      const ref = (schema.properties as Record<string, any>).schema as {
+        const?: string
+        enum?: Array<string>
+      }
+      if (ref != null) {
+        if (ref.enum != null) {
+          records.references[name] = ref.enum
+        } else if (typeof ref.const === 'string') {
+          records.references[name] = [ref.const]
+        }
+      }
+    } else {
+      const requiredProps = (schema.required as Array<string>) ?? []
+      records.objects[name] = Object.entries(schema.properties as Record<string, any>).reduce(
+        (acc, [key, value]: [string, Schema]) => {
+          const prop = camelCase(key)
+          const opts = { name: (value.title as string) ?? key, prefix: name }
+          const required = requiredProps.includes(key)
+          if (value.type === 'array') {
+            acc[prop] = { required, type: 'list', name: addSchema(records, value, opts) }
+          } else if (value.type === 'object') {
+            const type = value.$id === SCHEMA_REF_ID ? 'reference' : 'object'
+            acc[prop] = { required, type, name: addSchema(records, value, opts) }
+          } else {
+            acc[prop] = { ...value, required } as Field
+          }
+          return acc
+        },
+        {} as Record<string, Field>
+      )
+    }
+  }
+
+  return name
+}
+
+function extractSchemaReferences(schema: Schema): Array<string> {
+  if (schema.type === 'array') {
+    return extractSchemaReferences(schema.items)
+  }
+
+  if (schema.type === 'object' && schema.properties != null) {
+    const props = schema.properties as Record<string, Schema>
+
+    if (schema.$id === SCHEMA_REF_ID) {
+      if (props.schema == null) {
+        return []
+      }
+      if (Array.isArray(props.schema.enum)) {
+        return props.schema.enum as Array<string>
+      }
+      if (typeof props.schema.const === 'string') {
+        return [props.schema.const]
+      }
+    }
+
+    return Object.values(props).flatMap(extractSchemaReferences)
+  }
+
+  return []
+}
+
 export class DocSet {
   _ceramic: CeramicApi
   _docs: Record<string, Promise<Doctype>> = {}
@@ -41,7 +157,11 @@ export class DocSet {
     this._ceramic = ceramic
   }
 
-  async _loadDoc(docID: DocID | string): Promise<Doctype> {
+  async loadCreated(created: Promise<CreatedDoc>): Promise<Doctype> {
+    return await this.loadDoc((await created).id)
+  }
+
+  async loadDoc(docID: DocID | string): Promise<Doctype> {
     const id = docIDToString(docID)
     if (this._docs[id] == null) {
       this._docs[id] = this._ceramic.loadDocument(id)
@@ -65,6 +185,10 @@ export class DocSet {
     return this._schemas[alias] != null
   }
 
+  getSchema(alias: string): Promise<CreatedDoc> | null {
+    return this._schemas[alias] ?? null
+  }
+
   deleteSchema(alias: string): boolean {
     if (this.hasSchema(alias)) {
       delete this._schemas[alias]
@@ -85,8 +209,8 @@ export class DocSet {
     this._schemas[name] = Promise.all(deps).then((dependencies) => {
       return publishSchema(this._ceramic, { name, content: schema }).then(
         (doc) => {
-          this._schemaAliases[doc.versionId.toUrl()] = name
-          return { id: doc.versionId, dependencies }
+          this._schemaAliases[doc.commitId.toUrl()] = name
+          return { id: doc.commitId, dependencies }
         },
         (reason: any) => {
           delete this._schemas[name]
@@ -103,12 +227,55 @@ export class DocSet {
       throw new Error('Schema must have a title property or an alias must be provided')
     }
 
-    const created = await this.createSchema(name, schema)
+    const schemaRefs = new Set(extractSchemaReferences(schema))
+    const deps = Array.from(schemaRefs).map(async (id) => {
+      return await this.useExistingSchema(id)
+    })
+
+    const created = await this.createSchema(name, schema, deps)
     return created.id
+  }
+
+  async useExistingSchema(id: DocID | string, alias?: string): Promise<DocID> {
+    const existingAlias = this._schemaAliases[docIDToString(id)]
+    if (existingAlias != null) {
+      const existing = this._schemas[existingAlias]
+      if (existing == null) {
+        throw new Error(`Alias ${existingAlias} exists for this schema but no schema is attached`)
+      }
+      return (await existing).id
+    }
+
+    const doc = await this.loadDoc(id)
+    const content = (doc.content ?? {}) as Schema
+    const name = alias ?? (content.title as string | undefined)
+    if (name == null) {
+      throw new Error('Schema must have a title property or an alias must be provided')
+    }
+
+    const schemaRefs = new Set(extractSchemaReferences(content))
+    this._schemas[name] = Promise.all(
+      Array.from(schemaRefs).map(async (id) => await this.useExistingSchema(id))
+    ).then(
+      (dependencies) => {
+        this._schemaAliases[doc.commitId.toUrl()] = name
+        return { id: doc.commitId, dependencies }
+      },
+      (reason: any) => {
+        delete this._schemas[name]
+        throw reason
+      }
+    )
+
+    return doc.commitId
   }
 
   hasDefinition(alias: string): boolean {
     return this._definitions[alias] != null
+  }
+
+  getDefinition(alias: string): Promise<CreatedDoc> | null {
+    return this._definitions[alias] ?? null
   }
 
   deleteDefinition(alias: string): boolean {
@@ -141,23 +308,18 @@ export class DocSet {
   }
 
   async addDefinition(definition: Definition, alias = definition.name): Promise<DocID> {
-    const schemaAlias = this._schemaAliases[definition.schema]
-    if (schemaAlias == null) {
-      throw new Error('Schema for this definition has not been added')
-    }
-    const createdSchema = this._schemas[schemaAlias]
-    if (createdSchema == null) {
-      throw new Error('Schema alias for this definition could not be found')
-    }
-
     const created = await this.createDefinition(alias, definition, [
-      createdSchema.then(({ id }) => id),
+      this.useExistingSchema(definition.schema),
     ])
     return created.id
   }
 
   hasTile(alias: string): boolean {
     return this._tiles[alias] != null
+  }
+
+  getTile(alias: string): Promise<CreatedDoc> | null {
+    return this._tiles[alias] ?? null
   }
 
   deleteTile(alias: string): boolean {
@@ -171,7 +333,7 @@ export class DocSet {
   createTile<T extends Record<string, unknown>>(
     alias: string,
     contents: T,
-    meta: Partial<DocMetadata> = {},
+    meta: Partial<DocMetadata>,
     deps: Array<Promise<DocID>> = []
   ): Promise<CreatedDoc> {
     if (this.hasTile(alias)) {
@@ -193,11 +355,14 @@ export class DocSet {
   async addTile<T extends Record<string, unknown>>(
     alias: string,
     contents: T,
-    meta: Partial<DocMetadata> = {}
+    meta: Partial<DocMetadata>
   ): Promise<DocID> {
-    const deps =
-      meta.schema == null ? [] : [this._loadDoc(meta.schema).then((doc) => doc.versionId)]
-    const created = await this.createTile(alias, contents, meta, deps)
+    if (meta.schema == null) {
+      throw new Error('Missing schema to add tile')
+    }
+    const created = await this.createTile(alias, contents, meta, [
+      this.useExistingSchema(meta.schema),
+    ])
     return created.id
   }
 
@@ -261,6 +426,61 @@ export class DocSet {
   async toSignedJSON(): Promise<EncodedSignedDocSet> {
     const { docs, ...signed } = await this.toSigned()
     return { ...signed, docs: encodeSignedMap(docs) }
+  }
+
+  async toGraphQLDocSetRecords(): Promise<GraphQLDocSetRecords> {
+    // TODO: throw error on using reserved names:
+    // - "node" and "index" roots
+    // - "id" field in object if node
+
+    const records: GraphQLDocSetRecords = {
+      index: {},
+      lists: {},
+      nodes: {},
+      objects: {},
+      references: {},
+      roots: {},
+    }
+
+    const handleSchemas = this.schemas.map(async (name) => {
+      const created = this.getSchema(name)
+      if (created != null) {
+        const doc = await this.loadCreated(created)
+        const schema = doc.content as Schema
+        if (schema == null) {
+          throw new Error(`Could not load schema ${name}`)
+        }
+        records.nodes[doc.commitId.toUrl()] = addSchema(records, schema, { prefix: '' })
+      }
+    })
+
+    const handleDefinitions = this.definitions.map(async (name) => {
+      const created = this.getDefinition(name)
+      if (created != null) {
+        const doc = await this.loadCreated(created)
+        const definition = doc.content as Definition
+        if (definition == null) {
+          throw new Error(`Could not load definition ${name}`)
+        }
+        records.index[name] = { id: doc.id.toString(), schema: definition.schema }
+      }
+    })
+
+    const handleTiles = this.tiles.map(async (name) => {
+      const created = this.getTile(name)
+      if (created != null) {
+        const doc = await this.loadCreated(created)
+        const { schema } = doc.metadata
+        if (schema == null) {
+          throw new Error(`Missing schema for tile ${name}`)
+        }
+        records.roots[name] = { id: doc.id.toString(), schema }
+      }
+    })
+
+    await Promise.all([...handleSchemas, ...handleDefinitions, ...handleTiles])
+
+    return records
   }
 }
 

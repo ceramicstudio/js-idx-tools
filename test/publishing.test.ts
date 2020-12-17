@@ -9,7 +9,7 @@ describe('publishing', () => {
   const testDocID = DocID.fromString(testID)
   const testDoc = {
     id: testDocID,
-    versionId: DocID.fromString('kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp60t'),
+    commitId: DocID.fromString('kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp60t'),
   }
 
   describe('createTile', () => {

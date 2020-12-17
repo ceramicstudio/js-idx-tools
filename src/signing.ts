@@ -2,7 +2,7 @@ import type DocID from '@ceramicnetwork/docid'
 import type { DagJWSResult, DID } from 'dids'
 
 import * as schemas from './schemas'
-import type { Definition, IDXSignedSchemas, Schema } from './types'
+import type { Definition, SignedSchemas, Schema } from './types'
 import { docIDToString, promiseMap } from './utils'
 
 export async function signTile<T = unknown>(
@@ -32,7 +32,7 @@ export async function signIDXDefinitions(
   })
 }
 
-export async function signIDXSchemas(did: DID): Promise<IDXSignedSchemas> {
+export async function signIDXSchemas(did: DID): Promise<SignedSchemas> {
   return await promiseMap(schemas, async (schema: Schema) => {
     return [await signTile(did, schema)]
   })
