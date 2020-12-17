@@ -1,10 +1,10 @@
 import type { CeramicApi, DocMetadata, DocOpts, Doctype } from '@ceramicnetwork/common'
 import { schemas as publishedSchemas } from '@ceramicstudio/idx-constants'
 import type {
-  IDXDefinitionName,
-  IDXPublishedDefinitions,
-  IDXPublishedSchemas,
-  IDXSchemaName,
+  DefinitionName,
+  PublishedDefinitions,
+  PublishedSchemas,
+  SchemaName,
 } from '@ceramicstudio/idx-constants'
 import type { DagJWSResult } from 'dids'
 import isEqual from 'fast-deep-equal'
@@ -13,11 +13,11 @@ import { signedDefinitions, signedSchemas } from './signed'
 import type {
   Definition,
   DefinitionDoc,
-  IDXPublishedConfig,
-  IDXSignedDefinitions,
-  IDXSignedSchemas,
   PublishDoc,
+  PublishedConfig,
   SchemaDoc,
+  SignedDefinitions,
+  SignedSchemas,
 } from './types'
 import { promiseMap, docIDToString } from './utils'
 import { isValidDefinition, isSecureSchema } from './validate'
@@ -111,27 +111,27 @@ export async function publishSignedMap<T extends string = string>(
 
 export async function publishIDXSignedDefinitions(
   ceramic: CeramicApi,
-  definitions: IDXSignedDefinitions = signedDefinitions
-): Promise<IDXPublishedDefinitions> {
+  definitions: SignedDefinitions = signedDefinitions
+): Promise<PublishedDefinitions> {
   const signedMap = await publishSignedMap(ceramic, definitions)
   return Object.entries(signedMap).reduce((acc, [key, doc]) => {
-    acc[key as IDXDefinitionName] = doc.id.toString()
+    acc[key as DefinitionName] = doc.id.toString()
     return acc
-  }, {} as IDXPublishedDefinitions)
+  }, {} as PublishedDefinitions)
 }
 
 export async function publishIDXSignedSchemas(
   ceramic: CeramicApi,
-  schemas: IDXSignedSchemas = signedSchemas
-): Promise<IDXPublishedSchemas> {
+  schemas: SignedSchemas = signedSchemas
+): Promise<PublishedSchemas> {
   const signedMap = await publishSignedMap(ceramic, schemas)
   return Object.entries(signedMap).reduce((acc, [key, doc]) => {
-    acc[key as IDXSchemaName] = doc.versionId.toUrl()
+    acc[key as SchemaName] = doc.commitId.toUrl()
     return acc
-  }, {} as IDXPublishedSchemas)
+  }, {} as PublishedSchemas)
 }
 
-export async function publishIDXConfig(ceramic: CeramicApi): Promise<IDXPublishedConfig> {
+export async function publishIDXConfig(ceramic: CeramicApi): Promise<PublishedConfig> {
   const [definitions, schemas] = await Promise.all([
     publishIDXSignedDefinitions(ceramic),
     publishIDXSignedSchemas(ceramic),

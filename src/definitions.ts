@@ -1,12 +1,12 @@
-import type { IDXDefinitionName, IDXPublishedSchemas } from '@ceramicstudio/idx-constants'
+import type { DefinitionName, PublishedSchemas } from '@ceramicstudio/idx-constants'
 import type { DID } from 'dids'
 
 import { signIDXDefinitions } from './signing'
-import type { Definition, IDXSignedDefinitions } from './types'
+import type { Definition, SignedDefinitions } from './types'
 
 export function createIDXDefinitions(
-  schemas: IDXPublishedSchemas
-): Record<IDXDefinitionName, Definition> {
+  schemas: PublishedSchemas
+): Record<DefinitionName, Definition> {
   return {
     basicProfile: {
       name: 'Basic Profile',
@@ -28,8 +28,8 @@ export function createIDXDefinitions(
 
 export async function createIDXSignedDefinitions(
   did: DID,
-  schemas: IDXPublishedSchemas
-): Promise<IDXSignedDefinitions> {
+  schemas: PublishedSchemas
+): Promise<SignedDefinitions> {
   const definitions = createIDXDefinitions(schemas)
   return await signIDXDefinitions(did, schemas.Definition, definitions)
 }

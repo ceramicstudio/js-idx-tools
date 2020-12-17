@@ -143,7 +143,7 @@ describe('docset', () => {
     }
 
     const docset = new DocSet(ceramic)
-    const [notesListSchemaVersionID] = await Promise.all([
+    const [notesListSchemaCommitID] = await Promise.all([
       docset.addSchema(NotesListSchema),
       docset.addSchema(NoteSchema),
     ])
@@ -153,12 +153,149 @@ describe('docset', () => {
       {
         name: 'notes',
         description: 'My notes',
-        schema: notesListSchemaVersionID.toUrl(),
+        schema: notesListSchemaCommitID.toUrl(),
       },
       'myNotes'
     )
     expect(docset.definitions).toEqual(['myNotes'])
 
     await expect(docset.toSignedJSON()).resolves.toBeDefined()
+  })
+
+  test('creation flow with associated schema', async () => {
+    jest.setTimeout(20000)
+
+    const docset = new DocSet(ceramic)
+
+    // TODO: also test with external schema added in docset constructor?
+    // or added dynamically
+
+    const NoteSchema = {
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      title: 'Note',
+      type: 'object',
+      properties: {
+        date: {
+          type: 'string',
+          format: 'date-time',
+          maxLength: 30,
+        },
+        text: {
+          type: 'string',
+          maxLength: 4000,
+        },
+      },
+      required: ['date', 'text'],
+    }
+
+    const noteSchema = await ceramic.createDocument('tile', { content: NoteSchema })
+    const noteSchemaURL = noteSchema.commitId.toUrl()
+
+    const NotesSchema = {
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      title: 'Notes',
+      type: 'object',
+      properties: {
+        notes: {
+          type: 'array',
+          title: 'list',
+          items: {
+            type: 'object',
+            title: 'item',
+            properties: {
+              note: {
+                type: 'object',
+                $id: 'ceramic://schemaReference',
+                title: 'reference',
+                properties: {
+                  schema: { type: 'string', const: noteSchemaURL },
+                  id: { type: 'string' },
+                },
+              },
+              title: {
+                type: 'string',
+                maxLength: 100,
+              },
+            },
+            required: ['note'],
+          },
+        },
+      },
+    }
+
+    const notesSchema = await ceramic.createDocument('tile', { content: NotesSchema })
+    const notesSchemaURL = notesSchema.commitId.toUrl()
+
+    const notesDefinitionID = await docset.addDefinition(
+      {
+        name: 'notes',
+        description: 'My notes',
+        schema: notesSchemaURL,
+      },
+      'myNotes'
+    )
+
+    const exampleNoteID = await docset.addTile(
+      'exampleNote',
+      { date: '2020-12-10T11:12:34.567Z', text: 'An example note' },
+      { schema: noteSchemaURL }
+    )
+
+    await expect(docset.toGraphQLDocSetRecords()).resolves.toEqual({
+      index: {
+        myNotes: {
+          id: notesDefinitionID.toString(),
+          schema: notesSchemaURL,
+        },
+      },
+      lists: { NotesList: 'NotesListItem' },
+      nodes: {
+        [notesSchemaURL]: 'Notes',
+        [noteSchemaURL]: 'Note',
+      },
+      objects: {
+        NotesListItem: {
+          note: {
+            type: 'reference',
+            name: 'NotesListItemReference',
+            required: true,
+          },
+          title: {
+            type: 'string',
+            required: false,
+            maxLength: 100,
+          },
+        },
+        Notes: {
+          notes: {
+            name: 'NotesList',
+            required: false,
+            type: 'list',
+          },
+        },
+        Note: {
+          date: {
+            type: 'string',
+            required: true,
+            format: 'date-time',
+            maxLength: 30,
+          },
+          text: {
+            type: 'string',
+            required: true,
+            maxLength: 4000,
+          },
+        },
+      },
+      references: {
+        NotesListItemReference: [noteSchemaURL],
+      },
+      roots: {
+        exampleNote: {
+          id: exampleNoteID.toString(),
+          schema: noteSchemaURL,
+        },
+      },
+    })
   })
 })
