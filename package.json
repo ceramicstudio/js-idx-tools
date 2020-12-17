@@ -25,7 +25,7 @@
     "analyze": "size-limit --why"
   },
   "dependencies": {
-    "@ceramicstudio/idx-constants": "^0.5.0",
+    "@ceramicstudio/idx-constants": "^0.5.1",
     "ajv": "^6.12.6",
     "change-case": "^4.1.2",
     "cids": "~1.0.2",

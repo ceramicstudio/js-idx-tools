@@ -63,6 +63,7 @@ type AddSchemaOptions = {
   prefix: string
 }
 
+// Add a JSON schema to the provided records based on its type
 function addSchema(
   records: GraphQLDocSetRecords,
   schema: Schema,
@@ -116,6 +117,7 @@ function addSchema(
   return name
 }
 
+// Recursively extract references to other schemas from a JSON schema arrays and objects
 function extractSchemaReferences(schema: Schema): Array<string> {
   if (schema.type === 'array') {
     return extractSchemaReferences(schema.items)
@@ -366,6 +368,7 @@ export class DocSet {
     return created.id
   }
 
+  // Export to maps of aliases to published doc IDs/URLs
   async toPublished(): Promise<PublishedDocSet> {
     const definitions: Record<string, string> = {}
     const schemas: Record<string, string> = {}
@@ -388,6 +391,7 @@ export class DocSet {
     return { definitions, schemas, tiles }
   }
 
+  // Export to maps of aliases to signed records, would allow to publish a docset on a Ceramic node
   async toSigned(): Promise<SignedDocSet> {
     const deps = new Set<string>()
     const docs: Record<string, Array<DagJWSResult>> = {}
@@ -423,11 +427,13 @@ export class DocSet {
     return { docs, definitions, schemas }
   }
 
+  // Export signed records to JSON
   async toSignedJSON(): Promise<EncodedSignedDocSet> {
     const { docs, ...signed } = await this.toSigned()
     return { ...signed, docs: encodeSignedMap(docs) }
   }
 
+  // Export to GraphQL docset records for conversion to GraphQL schema
   async toGraphQLDocSetRecords(): Promise<GraphQLDocSetRecords> {
     // TODO: throw error on using reserved names:
     // - "node" and "index" roots
@@ -484,6 +490,7 @@ export class DocSet {
   }
 }
 
+// Publish a signed docset to the given Ceramic node
 export async function publishSignedDocSet(
   ceramic: CeramicApi,
   docSet: SignedDocSet
@@ -504,6 +511,7 @@ export async function publishSignedDocSet(
   await Promise.all(others)
 }
 
+// Publish a JSON-encoded signed docset to the given Ceramic node
 export async function publishEncodedSignedDocSet(
   ceramic: CeramicApi,
   { docs, ...docSet }: EncodedSignedDocSet
