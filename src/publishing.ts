@@ -1,4 +1,10 @@
-import type { CeramicApi, DocMetadata, DocOpts, Doctype } from '@ceramicnetwork/common'
+import type {
+  CeramicApi,
+  CeramicCommit,
+  DocMetadata,
+  DocOpts,
+  Doctype,
+} from '@ceramicnetwork/common'
 import { schemas as publishedSchemas } from '@ceramicstudio/idx-constants'
 import type {
   DefinitionName,
@@ -6,7 +12,6 @@ import type {
   PublishedSchemas,
   SchemaName,
 } from '@ceramicstudio/idx-constants'
-import type { DagJWSResult } from 'dids'
 import isEqual from 'fast-deep-equal'
 
 import { signedDefinitions, signedSchemas } from './signed'
@@ -83,14 +88,14 @@ export async function updateDefinition(ceramic: CeramicApi, doc: DefinitionDoc):
   return false
 }
 
-export async function publishRecords(
+export async function publishCommits(
   ceramic: CeramicApi,
-  [genesis, ...updates]: Array<DagJWSResult>
+  [genesis, ...updates]: Array<CeramicCommit>
 ): Promise<Doctype> {
   const doc = await ceramic.createDocumentFromGenesis('tile', genesis, PUBLISH_OPTS)
   await ceramic.pin.add(doc.id)
-  for (const record of updates) {
-    await ceramic.applyRecord(doc.id, record, PUBLISH_OPTS)
+  for (const commit of updates) {
+    await ceramic.applyCommit(doc.id, commit, PUBLISH_OPTS)
   }
   return doc
 }
@@ -104,9 +109,9 @@ export async function publishSchema(ceramic: CeramicApi, doc: SchemaDoc): Promis
 
 export async function publishSignedMap<T extends string = string>(
   ceramic: CeramicApi,
-  signed: Record<T, Array<DagJWSResult>>
+  signed: Record<T, Array<CeramicCommit>>
 ): Promise<Record<T, Doctype>> {
-  return await promiseMap(signed, async (records) => await publishRecords(ceramic, records))
+  return await promiseMap(signed, async (commits) => await publishCommits(ceramic, commits))
 }
 
 export async function publishIDXSignedDefinitions(

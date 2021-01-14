@@ -2,7 +2,7 @@
 
 import DocID from '@ceramicnetwork/docid'
 
-import { createTile, publishDoc, publishRecords } from '../src'
+import { createTile, publishCommits, publishDoc } from '../src'
 
 describe('publishing', () => {
   const testID = 'kjzl6cwe1jw147dvq16zluojmraqvwdmbh61dx9e0c59i344lcrsgqfohexp60s'
@@ -43,6 +43,25 @@ describe('publishing', () => {
         metadata: { controllers: ['did:test:456'] },
       })
     })
+  })
+
+  test('publishCommits', async () => {
+    const createDocument = jest.fn(() => Promise.resolve(testDoc))
+    const applyCommit = jest.fn(() => Promise.resolve(testDoc))
+    const pinAdd = jest.fn(() => Promise.resolve())
+    const ceramic = {
+      createDocumentFromGenesis: createDocument,
+      applyCommit,
+      pin: { add: pinAdd },
+    } as any
+
+    const commits = [{ jws: {}, __genesis: true }, { jws: {} }, { jws: {} }]
+    const opts = { anchor: false, publish: false }
+    await expect(publishCommits(ceramic, commits as any)).resolves.toBe(testDoc)
+    expect(createDocument).toBeCalledWith('tile', { jws: {}, __genesis: true }, opts)
+    expect(pinAdd).toBeCalledWith(testDocID)
+    expect(applyCommit).toBeCalledTimes(2)
+    expect(applyCommit).toBeCalledWith(testDocID, { jws: {} }, opts)
   })
 
   describe('publishDoc', () => {
@@ -90,24 +109,5 @@ describe('publishing', () => {
       expect(loadDocument).toBeCalledWith(testID)
       expect(change).not.toBeCalled()
     })
-  })
-
-  test('publishRecords', async () => {
-    const createDocument = jest.fn(() => Promise.resolve(testDoc))
-    const applyRecord = jest.fn(() => Promise.resolve(testDoc))
-    const pinAdd = jest.fn(() => Promise.resolve())
-    const ceramic = {
-      createDocumentFromGenesis: createDocument,
-      applyRecord,
-      pin: { add: pinAdd },
-    } as any
-
-    const records = [{ jws: {}, __genesis: true }, { jws: {} }, { jws: {} }]
-    const opts = { anchor: false, publish: false }
-    await expect(publishRecords(ceramic, records as any)).resolves.toBe(testDoc)
-    expect(createDocument).toBeCalledWith('tile', { jws: {}, __genesis: true }, opts)
-    expect(pinAdd).toBeCalledWith(testDocID)
-    expect(applyRecord).toBeCalledTimes(2)
-    expect(applyRecord).toBeCalledWith(testDocID, { jws: {} }, opts)
   })
 })

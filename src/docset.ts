@@ -4,7 +4,7 @@ import { camelCase, pascalCase } from 'change-case'
 import type { DagJWSResult } from 'dids'
 
 import { decodeSignedMap, encodeSignedMap } from './encoding'
-import { createDefinition, createTile, publishRecords, publishSchema } from './publishing'
+import { createDefinition, createTile, publishCommits, publishSchema } from './publishing'
 import type { Definition, EncodedDagJWSResult, Schema } from './types'
 import { docIDToString } from './utils'
 
@@ -391,7 +391,7 @@ export class DocSet {
     return { definitions, schemas, tiles }
   }
 
-  // Export to maps of aliases to signed records, would allow to publish a docset on a Ceramic node
+  // Export to maps of aliases to signed commits, would allow to publish a docset on a Ceramic node
   async toSigned(): Promise<SignedDocSet> {
     const deps = new Set<string>()
     const docs: Record<string, Array<DagJWSResult>> = {}
@@ -403,8 +403,8 @@ export class DocSet {
       dependencies.forEach((depid) => {
         deps.add(depid.toString())
       })
-      const records = await this._ceramic.loadDocumentRecords(id)
-      docs[id.toString()] = records.map((r) => r.value as DagJWSResult)
+      const commits = await this._ceramic.loadDocumentCommits(id)
+      docs[id.toString()] = commits.map((r) => r.value as DagJWSResult)
     }
 
     const handleDefinitions = Object.entries(this._definitions).map(async ([alias, created]) => {
@@ -427,7 +427,7 @@ export class DocSet {
     return { docs, definitions, schemas }
   }
 
-  // Export signed records to JSON
+  // Export signed commits to JSON
   async toSignedJSON(): Promise<EncodedSignedDocSet> {
     const { docs, ...signed } = await this.toSigned()
     return { ...signed, docs: encodeSignedMap(docs) }
@@ -498,8 +498,8 @@ export async function publishSignedDocSet(
   const schemas: Array<Promise<Doctype>> = []
   const others: Array<Promise<Doctype>> = []
 
-  Object.entries(docSet.docs).forEach(([id, records]) => {
-    const publish = publishRecords(ceramic, records)
+  Object.entries(docSet.docs).forEach(([id, commits]) => {
+    const publish = publishCommits(ceramic, commits)
     if (docSet.schemas.includes(id)) {
       schemas.push(publish)
     } else {
