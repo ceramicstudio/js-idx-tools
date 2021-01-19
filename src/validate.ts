@@ -1,10 +1,12 @@
 import Ajv from 'ajv'
+import addFormats from 'ajv-formats'
 import SecureSchema from 'ajv/lib/refs/json-schema-secure.json'
 
 import { Definition } from './schemas'
 import type { Schema } from './types'
 
-const ajv = new Ajv()
+const ajv = new Ajv({ strict: false })
+addFormats(ajv)
 
 export const validateDefinition = ajv.compile(Definition)
 

@@ -18,10 +18,6 @@
       "type": "string",
       "maxLength": 240
     },
-    "family": {
-      "type": "string",
-      "maxLength": 240
-    },
     "config": {
       "type": "object"
     }
