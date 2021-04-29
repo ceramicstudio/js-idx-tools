@@ -1,3 +1,7 @@
+# 🗑️ Note: This repository is deprecated in favour of [js-idx](https://github.com/ceramicstudio/js-idx/tree/master/packages/tools) 🗑️
+
+---
+
 # IDX tools
 
 ## Installation
